@@ -5,6 +5,7 @@ from matplotlib.axes import Axes
 from datasets import load_dataset
 from matplotlib.figure import Figure
 
+# Filenames of MIDI files from maestro dataset to be compared
 filenames = [
     "2004/MIDI-Unprocessed_SMF_12_01_2004_01-05_ORIG_MID--AUDIO_12_R1_2004_07_Track07_wav.midi",
     "2008/MIDI-Unprocessed_02_R3_2008_01-03_ORIG_MID--AUDIO_02_R3_2008_wav--2.midi",
@@ -12,15 +13,28 @@ filenames = [
 
 
 def plot_pitch_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece):
+    """
+    Plot comparison of note pitches between two MIDI pieces.
+
+    Args:
+    - first_piece: Instance of ff.MidiPiece representing the first MIDI piece.
+    - second_piece: Instance of ff.MidiPiece representing the second MIDI piece.
+
+    Returns:
+    - fig: Matplotlib Figure object.
+    - ax: Matplotlib Axes object.
+    """
+
     fig: Figure
     ax: Axes
     fig, ax = plt.subplots()
-    # Metadata for a legend
+    # Metadata for legend
     title_first = first_piece.source["title"]
     title_second = second_piece.source["title"]
     composer_first = first_piece.source["composer"]
     composer_second = second_piece.source["composer"]
 
+    # Plot distributions
     ax.set_title("Note pitches")
     ax.hist(first_piece.df.pitch, bins=88, color="turquoise", label=f"{composer_first}: {title_first}")
     ax.hist(second_piece.df.pitch, alpha=0.6, bins=88, color="orange", label=f"{composer_second}: {title_second}")
@@ -31,11 +45,22 @@ def plot_pitch_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece)
 
 
 def plot_dstart_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece):
+    """
+    Plot comparison of note start time differences (dstart) between two MIDI pieces.
+
+    Args:
+    - first_piece: Instance of ff.MidiPiece representing the first MIDI piece.
+    - second_piece: Instance of ff.MidiPiece representing the second MIDI piece.
+
+    Returns:
+    - fig: Matplotlib Figure object.
+    - ax: Matplotlib Axes object.
+    """
     fig: Figure
     ax: Axes
     fig, ax = plt.subplots()
 
-    # Metadata for a legend
+    # Metadata for legend
     title_first = first_piece.source["title"]
     title_second = second_piece.source["title"]
     filename_first = first_piece.source["midi_filename"]
@@ -44,7 +69,7 @@ def plot_dstart_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece
     first_df = first_piece.df
     second_df = second_piece.df
 
-    # Calculating dstarts
+    # Calculate dstarts
     first_df["next_start"] = first_df.start.shift(-1)
     first_df["dstart"] = first_df.next_start - first_df.start
 
@@ -62,18 +87,23 @@ def plot_dstart_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece
 
 
 def main():
+    # Path to the MIDI dataset
     dataset_path = "roszcz/maestro-sustain-v2"
     midi_dataset = load_dataset(
         path=dataset_path,
         split="train+test+validation",
     )
 
+    # Convert dataset to pandas DataFrame for filtering
     source_df = midi_dataset.to_pandas()
+
+    # Load metadata from string to dict for each record
     source_df["source"] = source_df["source"].map(lambda source: yaml.safe_load(source))
     source_df["midi_filename"] = [source["midi_filename"] for source in source_df.source]
 
     pieces = []
 
+    # Select MIDI pieces based on filenames
     for filename in filenames:
         idx = source_df.midi_filename == filename
         part_df = source_df[idx]
@@ -86,6 +116,7 @@ def main():
     first_piece = pieces[0]
     second_piece = pieces[1]
 
+    # Plot pitch comparison between two MIDI pieces
     fig, ax = plot_pitch_comparison(
         first_piece=first_piece,
         second_piece=second_piece,
