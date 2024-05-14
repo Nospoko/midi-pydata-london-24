@@ -31,14 +31,17 @@ def plot_spectrogram():
     f_max = librosa.note_to_hz("C8")
     f_min = librosa.note_to_hz("A0")
     ax.set_ylim((f_min, f_max))
+    return fig
 
 
 def plot_pianoroll():
     piece = ff.MidiPiece.from_file(path="data/piano.mid")
-    ff.view.draw_pianoroll_with_velocities(midi_piece=piece)
+    fig = ff.view.draw_pianoroll_with_velocities(midi_piece=piece)
+    return fig
 
 
 if __name__ == "__main__":
-    plot_spectrogram()
-    plot_pianoroll()
-    plt.show()
+    spec = plot_spectrogram()
+    pianoroll = plot_pianoroll()
+    spec.savefig("data/img/spectrogram.png")
+    pianoroll.savefig("data/img/pianoroll.png")

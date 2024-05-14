@@ -12,7 +12,7 @@ def calculate_average_nps():
 
     for record in dataset:
         total_notes += len(record["notes"]["pitch"])
-        total_time += max(record["notes"]["start"])
+        total_time += max(record["notes"]["start"]) - min(record["notes"]["start"])
 
     return total_notes / total_time
 
