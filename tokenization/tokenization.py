@@ -86,7 +86,7 @@ class MidiTokenizer:
 class NoLossTokenizer(MidiTokenizer):
     def __init__(
         self,
-        min_time_unit: float = 0.001,
+        min_time_unit: float = 0.01,
         n_velocity_bins: int = 128,
         special_tokens: list[str] = None,
     ):
@@ -335,13 +335,6 @@ class NoLossTokenizer(MidiTokenizer):
             note_offs = note_off_events[note_off_events["pitch"] == pitch].copy().reset_index(drop=True)
             note_ons = note_on_events[note_on_events["pitch"] == pitch].copy().reset_index(drop=True)
 
-            # and ignore (drop) all unmatched NOTE_OFF events ...
-            for index, row in note_offs.iterrows():
-                if row["end"] > note_ons.iloc[0]["start"]:
-                    break
-                else:
-                    note_offs.drop(index, inplace=True)
-            note_offs = note_offs.reset_index(drop=True)
             # we get pairs of note on and note off events for each key-press
             note_ons["end"] = note_offs["end"]
 

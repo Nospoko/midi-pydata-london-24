@@ -25,13 +25,13 @@ def main():
         split_info[split_name]["Performances"] = len(split)
         split_info[split_name]["Duration (hours)"] = total_duration
         split_info[split_name]["Size (GB)"] = None  # Size not provided in dataset
-        split_info[split_name]["Notes (millions)"] = total_notes / 1e6
+        split_info[split_name]["Number of notes (millions)"] = total_notes / 1e6
 
     # Summarize the total
     total_info = {
         "Performances": sum([split["Performances"] for split in split_info.values()]),
         "Duration (hours)": sum([split["Duration (hours)"] for split in split_info.values()]),
-        "Notes (millions)": sum([split["Notes (millions)"] for split in split_info.values()]),
+        "Number of notes (millions)": sum([split["Number of notes (millions)"] for split in split_info.values()]),
     }
 
     # Create a DataFrame
@@ -53,7 +53,7 @@ def main():
             split_info["train"]["Notes (millions)"],
             split_info["validation"]["Notes (millions)"],
             split_info["test"]["Notes (millions)"],
-            total_info["Notes (millions)"],
+            total_info["Number of notes (millions)"],
         ],
     }
 

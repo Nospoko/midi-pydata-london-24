@@ -27,7 +27,7 @@ def plot_pitch_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece)
 
     fig: Figure
     ax: Axes
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(14, 9))
     # Metadata for legend
     title_first = first_piece.source["title"]
     title_second = second_piece.source["title"]
@@ -58,7 +58,7 @@ def plot_dstart_comparison(first_piece: ff.MidiPiece, second_piece: ff.MidiPiece
     """
     fig: Figure
     ax: Axes
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(14, 9))
 
     # Metadata for legend
     title_first = first_piece.source["title"]

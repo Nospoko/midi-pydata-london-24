@@ -2,26 +2,30 @@ import pandas as pd
 import fortepyan as ff
 import streamlit as st
 import streamlit_pianoroll
-from datasets import load_dataset
+from tokenization.tokenization import NoLossTokenizer
 
 
 @st.cache_data
-def load_hf_dataset():
-    dataset = load_dataset("roszcz/maestro-sustain-v2", split="test")
-    return dataset
+def prepare_pieces():
+    path = "data/example.mid"
+    q_path = "data/quantized_example.mid"
+    piece = ff.MidiPiece.from_file(path=path)
+    quantized_piece = ff.MidiPiece.from_file(q_path)
+    return piece, quantized_piece
 
-
-dataset = load_hf_dataset()
+piece, quantized_piece = prepare_pieces()
 
 
 @st.cache_data
-def prepare_first_piece():
-    record = dataset[77]
-    piece = ff.MidiPiece.from_huggingface(record=record)
-    return piece
+def prepare_tokens():
+    tokenizer = NoLossTokenizer()
+    tokens = tokenizer.tokenize(notes=piece.df)
+    
+    untokenized_notes = tokenizer.untokenize(tokens=tokens)
+    untokenized_piece = ff.MidiPiece(untokenized_notes)
+    return untokenized_piece, tokens
 
-
-piece = prepare_first_piece()
+untokenized_piece, tokens = prepare_tokens()
 
 maestro_description = pd.DataFrame(
     {
@@ -59,6 +63,10 @@ slides = [
     # Scores
     {
         "images": ["data/img/scores.png"],
+    },
+    # piano performance
+    {
+        "video": "https://www.youtube.com/watch?v=8alxBofd_eQ",
     },
     # Spectrograms vs. MIDI
     {
@@ -108,6 +116,19 @@ slides = [
     {
         "images": ["data/img/pitch_comparison.png"],
     },
+    # quantization
+    {
+        "pieces": [piece, quantized_piece],
+    },
+    # NoLossTokenizer
+    {
+        "pieces": [piece, untokenized_piece],
+        "code": tokens[:20],
+    },
+    # BPE
+    {
+        "images": ["data/img/bpe.png"],
+    },
 ]
 
 # Navigation buttons
@@ -136,3 +157,5 @@ if "pieces" in slide:
 if "images" in slide:
     for image in slide["images"]:
         st.image(image=image)
+if "video" in slide:
+    st.video(slide["video"])
