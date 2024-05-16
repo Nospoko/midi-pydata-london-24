@@ -66,7 +66,7 @@ streamlit run midi_basics.streamlit_piece.py
 ## Comparing MIDI Pieces
 
 ### Plotting Note Pitches Comparison
-We can compare the distribution of note pitches between two MIDI pieces using matplotlib histograms. 
+We can compare the distribution of note pitches between two MIDI pieces using matplotlib histograms.
 This can provide insights into the pitch range and distribution within each piece.
 ```shell
 python midi_basics/two_performances.py

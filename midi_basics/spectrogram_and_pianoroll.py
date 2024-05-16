@@ -2,6 +2,7 @@ import librosa
 import numpy as np
 import fortepyan as ff
 import matplotlib.pyplot as plt
+from fortepyan.view.pianoroll.structures import FigureResolution
 
 
 def plot_spectrogram():
@@ -15,8 +16,17 @@ def plot_spectrogram():
         hop_length=hop_length,
     )
     S_db = librosa.amplitude_to_db(np.abs(spectrogram), ref=np.max)
+    # Plotting
+    width_px = 1920
+    height_px = 1080
 
-    fig, ax = plt.subplots()
+    dpi = 120
+
+    fig_width = width_px / dpi
+    fig_height = height_px / dpi
+    figsize = (fig_width, fig_height)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     librosa.display.specshow(
         data=S_db,
         n_fft=n_fft,
@@ -36,7 +46,8 @@ def plot_spectrogram():
 
 def plot_pianoroll():
     piece = ff.MidiPiece.from_file(path="data/piano.mid")
-    fig = ff.view.draw_pianoroll_with_velocities(midi_piece=piece)
+    figres = FigureResolution(1920, 1080, dpi=120)
+    fig = ff.view.draw_pianoroll_with_velocities(midi_piece=piece, figres=figres)
     return fig
 
 

@@ -50,9 +50,18 @@ def main():
     first_composer_notes = first_composer_notes.sample(50000)
     second_composer_notes = second_composer_notes.sample(50000)
 
+    # Plotting
+    width_px = 1920
+    height_px = 1080
+
+    dpi = 120
+
+    fig_width = width_px / dpi
+    fig_height = height_px / dpi
+    figsize = (fig_width, fig_height)
     fig: Figure
     ax: Axes
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     # Plot distributions
     ax.set_title("Duration distribution")
