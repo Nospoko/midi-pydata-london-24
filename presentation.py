@@ -2,6 +2,7 @@ import pandas as pd
 import fortepyan as ff
 import streamlit as st
 import streamlit_pianoroll
+
 from tokenization.tokenization import NoLossTokenizer
 
 
@@ -13,6 +14,7 @@ def prepare_pieces():
     quantized_piece = ff.MidiPiece.from_file(q_path)
     return piece, quantized_piece
 
+
 piece, quantized_piece = prepare_pieces()
 
 
@@ -20,10 +22,11 @@ piece, quantized_piece = prepare_pieces()
 def prepare_tokens():
     tokenizer = NoLossTokenizer()
     tokens = tokenizer.tokenize(notes=piece.df)
-    
+
     untokenized_notes = tokenizer.untokenize(tokens=tokens)
     untokenized_piece = ff.MidiPiece(untokenized_notes)
     return untokenized_piece, tokens
+
 
 untokenized_piece, tokens = prepare_tokens()
 
