@@ -18,7 +18,7 @@ To load a midi file into a dataframe, we use:
 ```py
 import fortepyan as ff
 
-piece = ff.MidiPiece.from_file(path="data/piano.mid")
+piece = ff.MidiPiece.from_file(path="data/midi/piano.mid")
 ```
 
 ```shell

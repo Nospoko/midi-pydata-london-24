@@ -15,13 +15,15 @@ def main():
     record = dataset[77]
 
     piece = ff.MidiPiece.from_huggingface(record=record)
+    piece = piece[200:300]
     quantized_piece = quantizer.quantize_piece(piece=piece)
 
-    piece_path = "data/example.mid"
-    quantized_path = "data/quantized_example.mid"
+    piece_path = "data/midi/example.mid"
+    quantized_path = "data/midi/quantized_example.mid"
 
     piece.to_midi().write(piece_path)
     quantized_piece.to_midi().write(quantized_path)
+    print(quantized_piece.df)
 
 
 if __name__ == "__main__":

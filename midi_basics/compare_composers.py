@@ -67,7 +67,7 @@ def main():
     ax.set_title("Duration distribution")
     ax.hist(first_composer_notes.duration, bins=1000, color="turquoise", label=composers[0])
     ax.hist(second_composer_notes.duration, alpha=0.6, bins=1000, color="orange", label=composers[1])
-    ax.set_xlim(0, 5)  # Limit x-axis for better visualization
+    ax.set_xlim(0, 2)  # Limit x-axis for better visualization
 
     fig.subplots_adjust(bottom=0.3, wspace=0.33)
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2))

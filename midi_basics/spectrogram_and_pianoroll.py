@@ -6,7 +6,7 @@ from fortepyan.view.pianoroll.structures import FigureResolution
 
 
 def plot_spectrogram():
-    y, sr = librosa.load("data/piano.mp3", sr=44100)
+    y, sr = librosa.load("data/generated_audio.mp3", sr=44100)
     n_fft = 2 << 15
     hop_length = n_fft // 4
 
@@ -45,7 +45,7 @@ def plot_spectrogram():
 
 
 def plot_pianoroll():
-    piece = ff.MidiPiece.from_file(path="data/piano.mid")
+    piece = ff.MidiPiece.from_file(path="data/midi/generated_midi.mid")
     figres = FigureResolution(1920, 1080, dpi=120)
     fig = ff.view.draw_pianoroll_with_velocities(midi_piece=piece, figres=figres)
     return fig

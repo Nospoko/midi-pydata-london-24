@@ -2,7 +2,7 @@ import fortepyan as ff
 
 
 def main():
-    piece = ff.MidiPiece.from_file(path="data/piano.mid")
+    piece = ff.MidiPiece.from_file(path="data/midi/piano.mid")
     print(piece.df)
 
 
