@@ -94,7 +94,7 @@ slides = [
     {
         "header": "Yuja Wang transcribed by Basic Pitch",
         "video": "data/Yuja_Wang.mp4",
-        "piece_paths": ["data/midi/yuja_wang.mid", "data/midi/bumblebee.mid"],
+        "piece_paths": ["data/midi/yuja_wang.mid"],
     },
     # MIDI sequence
     {
@@ -212,6 +212,17 @@ slides = [
     {
         "images": ["data/img/bpe.png"],
     },
+    # links
+    {
+        "content":
+    """
+    Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
+    Github: https://github.com/Nospoko
+    My Github: https://github.com/WojciechMat
+    Presentation repo: https://github.com/Nospoko/midi-pydata-london-24
+    Email: wmatejuk14@gmail.com
+    """
+    }
 ]
 
 
