@@ -23,7 +23,18 @@ def prepare_piece(idx: int = 77):
     return piece
 
 
+@st.cache_data
+def prepare_generated_piece():
+    path = "data/midi/mozart_with_gpt_08.mid"
+    path_gen = "data/midi/only_generated_mozart.mid"
+    dual_piece = ff.MidiPiece.from_file(path)
+    generated_piece = ff.MidiPiece.from_file(path_gen)
+    original_piece = dual_piece[: generated_piece.size]
+    return original_piece, generated_piece
+
+
 piece = prepare_piece(77)
+original_piece, generated_piece = prepare_generated_piece()
 
 
 @st.cache_data
@@ -63,12 +74,16 @@ slides = [
     },
     # Harmony
     {
-        "header": '"All nature consists of harmony arising out of numbers"',
+        "header": '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"',
         "images": ["data/img/harmonics.png"],
     },
     # Hiller
     {
         "images": ["data/img/hiller.jpg"],
+    },
+    # Cage
+    {
+        "images": ["data/img/cage.jpg"],
     },
     # Piano
     {
@@ -193,6 +208,8 @@ slides = [
     {
         "images": ["data/img/pitch_comparison.png"],
     },
+    # intermission
+    {"images": ["data.img/graphics.jpg"]},
     # quantization
     {
         "header": "Quantisation",
@@ -203,25 +220,35 @@ slides = [
         """,
         "piece_paths": ["data/midi/example.mid", "data/midi/quantized_example.mid"],
     },
+    # intermission
+    {"images": ["data.img/graphics.jpg"]},
     # NoLossTokenizer
     {
-        "pieces": [piece, untokenized_piece],
+        "piece_paths": ["data/midi/example.mid"],
+        "pieces": [untokenized_piece],
         "code": tokens[:20],
     },
     # BPE
     {
         "images": ["data/img/bpe.png"],
     },
-    # NoLossTokenizer model
-    {"content": {}},
+    # Model generated piece example
+    {
+        "header": "Mozart and GPT",
+        "dual_piece": (original_piece, generated_piece),
+    },
     # Generated midi pitch
     {
         "images": ["data/img/generated_pitch_comparison.png"],
     },
     # generated midi pitch compare
-    {"images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"]},
+    {
+        "images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"],
+    },
     # concatenated generations
-    {"piece_paths": ["data/midi/f_major_gen_1.mid"]},
+    {
+        "piece_paths": ["data/midi/f_major_gen_1.mid"],
+    },
     # Awesome Pitch
     {
         "images": ["data/img/generated_pitch_comparison.png", "data/img/awesome_pitch_comparison.png"],
@@ -289,6 +316,8 @@ def main():
         for piece_path in slide["piece_paths"]:
             prepared_piece = ff.MidiPiece.from_file(piece_path)
             streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+    if "dual_piece" in slide:
+        streamlit_pianoroll.from_fortepyan(piece=original_piece, secondary_piece=generated_piece)
 
 
 if __name__ == "__main__":
