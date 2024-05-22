@@ -1,17 +1,24 @@
-import yaml
+import argparse
+
 import numpy as np
 import fortepyan as ff
 import matplotlib.pyplot as plt
-from datasets import load_dataset
 
 
-def plot_histogram(data1, data2, label1, label2, xlabel, ylabel, title, bins=88):
+def plot_histogram(
+    data1: np.ndarray,
+    data2: np.ndarray,
+    label1: str,
+    label2: str,
+    xlabel: str,
+    ylabel: str,
+    title: str,
+    bins: np.ndarray,
+):
     """Utility function to plot histograms for comparison."""
     width_px = 1920
     height_px = 1080
-
     dpi = 120
-
     fig_width = width_px / dpi
     fig_height = height_px / dpi
     figsize = (fig_width, fig_height)
@@ -28,49 +35,25 @@ def plot_histogram(data1, data2, label1, label2, xlabel, ylabel, title, bins=88)
     return fig, ax
 
 
-def main():
-    # Load the MIDI dataset
-    dataset_path = "roszcz/maestro-sustain-v2"
-    midi_dataset = load_dataset(path=dataset_path, split="train+test+validation")
-
-    # Convert to DataFrame and process metadata
-    source_df = midi_dataset.to_pandas()
-    source_df["source"] = source_df["source"].apply(yaml.safe_load)
-    source_df["midi_filename"] = source_df["source"].apply(lambda src: src["midi_filename"])
-
+def main(args):
+    # Load MIDI files
     pieces = []
-
-    # Filenames of MIDI files from maestro dataset to be compared
-    # Different pieces
-    filenames = [
-        "2004/MIDI-Unprocessed_SMF_12_01_2004_01-05_ORIG_MID--AUDIO_12_R1_2004_07_Track07_wav.midi",
-        "2008/MIDI-Unprocessed_02_R3_2008_01-03_ORIG_MID--AUDIO_02_R3_2008_wav--2.midi",
-    ]
-    # Different performances
-    # filenames = [
-    #     "2011/MIDI-Unprocessed_15_R1_2011_MID--AUDIO_R1-D6_10_Track10_wav.midi",
-    #     "2014/MIDI-UNPROCESSED_06-08_R1_2014_MID--AUDIO_07_R1_2014_wav--6.midi",
-    # ]
-
-    for filename in filenames:
-        idx = source_df["midi_filename"] == filename
-        if idx.any():
-            record = midi_dataset[idx.idxmax()]
-            pieces.append(ff.MidiPiece.from_huggingface(record))
+    try:
+        pieces.append(ff.MidiPiece.from_file(args.filepath1))
+        pieces.append(ff.MidiPiece.from_file(args.filepath2))
+    except Exception as e:
+        print(f"Error loading MIDI files: {e}")
+        return
 
     if len(pieces) < 2:
         print("Not enough MIDI files found for comparison.")
         return
 
     first_piece, second_piece = pieces
+    import os
 
-    # Get truncated titles for labels
-    def get_truncated_title(piece, max_length=30):
-        title = piece.source.get("title", "Unknown Title")
-        return title if len(title) <= max_length else title[:max_length] + "..."
-
-    label1 = get_truncated_title(first_piece)
-    label2 = get_truncated_title(second_piece)
+    label1 = os.path.basename(args.filepath1)
+    label2 = os.path.basename(args.filepath2)
 
     # Plot pitch comparison
     bins = np.linspace(21, 109, num=89)
@@ -90,7 +73,7 @@ def main():
     second_piece.df["dstart"] = second_piece.df.start.diff().shift(-1)
 
     # Plot dstart comparison
-    bins = np.linspace(0, 1.00, num=200)
+    bins = np.linspace(0, 1, num=200)
     fig, ax = plot_histogram(
         data1=first_piece.df.dstart.dropna(),
         data2=second_piece.df.dstart.dropna(),
@@ -106,4 +89,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Compare two MIDI files.")
+    parser.add_argument("filepath1", type=str, help="Path to the first MIDI file")
+    parser.add_argument("filepath2", type=str, help="Path to the second MIDI file")
+    args = parser.parse_args()
+    main(args)
