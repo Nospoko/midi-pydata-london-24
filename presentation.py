@@ -94,7 +94,7 @@ slides = [
     {
         "header": "Yuja Wang transcribed by Basic Pitch",
         "video": "data/Yuja_Wang.mp4",
-        "piece_paths": ["data/midi/yuja_wang.mid", "data/midi/bumblebee.mid"],
+        "piece_paths": ["data/midi/yuja_wang.mid"],
     },
     # MIDI sequence
     {
@@ -211,6 +211,38 @@ slides = [
     # BPE
     {
         "images": ["data/img/bpe.png"],
+    },
+    # NoLossTokenizer model
+    {"content": {}},
+    # Generated midi pitch
+    {
+        "images": ["data/img/generated_pitch_comparison.png"],
+    },
+    # generated midi pitch compare
+    {"images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"]},
+    # concatenated generations
+    {"piece_paths": ["data/midi/f_major_gen_1.mid"]},
+    # Awesome Pitch
+    {
+        "images": ["data/img/generated_pitch_comparison.png", "data/img/awesome_pitch_comparison.png"],
+    },
+    # Awesome chopin
+    {
+        "piece_paths": ["data/midi/f_major_gen_awesome_8.mid"],
+    },
+    # links
+    {
+        "content": """
+    Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
+
+    Github: https://github.com/Nospoko
+
+    My Github: https://github.com/WojciechMat
+
+    Presentation repo: https://github.com/Nospoko/midi-pydata-london-24
+
+    Email: wmatejuk14@gmail.com
+    """
     },
 ]
 
