@@ -72,6 +72,23 @@ slides = [
     {
         "images": ["data/img/cover.png"],
     },
+    # links
+    {
+        "header": "Important links",
+        "content": """
+    Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
+
+    Github: https://github.com/Nospoko
+
+    My Github: https://github.com/WojciechMat
+
+    Presentation repo: https://github.com/Nospoko/midi-pydata-london-24
+
+    Pianoroll: https://pianoroll.io/
+
+    Email: wmatejuk14@gmail.com
+    """,
+    },
     # Harmony
     {
         "header": '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"',
@@ -208,9 +225,52 @@ slides = [
     {
         "images": ["data/img/pitch_comparison.png"],
     },
-    # intermission
-    {"images": ["data.img/graphics.jpg"]},
+    # Modelling
+    {
+        "header": "Modelling piano performances with Large Language Models",
+    },
+    {
+        "header": "Modelling piano performances with Large Language Models",
+        "content": """
+        #### Data
+        Maestro dataset:
+        https://magenta.tensorflow.org/datasets/maestro
+        """,
+    },
+    {
+        "header": "Modelling piano performances with Large Language Models",
+        "content": """
+        #### Data
+        Maestro dataset:
+        https://magenta.tensorflow.org/datasets/maestro
+        #### Augmentation
+        This time with feeling:
+        https://arxiv.org/abs/1808.03715
+
+        """,
+    },
+    {
+        "header": "Modelling piano performances with Large Language Models",
+        "content": """
+        #### Data
+        Maestro dataset:
+        https://magenta.tensorflow.org/datasets/maestro
+        #### Augmentation
+        This time with feeling:
+        https://arxiv.org/abs/1808.03715
+        #### Quantisation
+        ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
+        """,
+    },
     # quantization
+    {
+        "header": "Quantisation",
+        "content": """
+        ```py
+        ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
+        ```
+        """,
+    },
     {
         "header": "Quantisation",
         "content": """
@@ -220,9 +280,14 @@ slides = [
         """,
         "piece_paths": ["data/midi/example.mid", "data/midi/quantized_example.mid"],
     },
-    # intermission
-    {"images": ["data.img/graphics.jpg"]},
+    {
+        "header": "Initial experiments",
+        "images": ["data/img/graphics2.jpg"],
+    },
     # NoLossTokenizer
+    {
+        "code": tokens[:20],
+    },
     {
         "piece_paths": ["data/midi/example.mid"],
         "pieces": [untokenized_piece],
@@ -230,7 +295,95 @@ slides = [
     },
     # BPE
     {
-        "images": ["data/img/bpe.png"],
+        "header": "BPE on MIDI data",
+        "content": "#### Original MIDI data",
+        "dataframe": piece.df,
+    },
+    {
+        "header": "Tokenize the data",
+        "content": """
+        #### Original MIDI data
+
+        #### &#8595;
+
+        ```
+        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
+        ```
+        """,
+    },
+    {
+        "header": "Convert to unicode characters",
+        "content": """
+        #### Original MIDI data
+
+        #### &#8595;
+
+        ```
+        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
+        ```
+
+        #### &#8595;
+
+        #### ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ
+        """,
+    },
+    {
+        "header": 'Split to "words"',
+        "content": """
+        #### Original MIDI data
+
+        #### &#8595;
+
+        ```
+        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
+        ```
+
+        #### &#8595;
+
+        #### ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ
+
+        #### &#8595;
+
+        #### ĻĺķğÅĝ»ķĚ¯ ĻğÓķĶĢ×ĸġ ÝĸĤãĸķ
+
+        """,
+    },
+    {
+        "header": "Train huggingface BPE tokenizer",
+        "content": """
+        #### Original MIDI data
+
+        #### &#8595;
+
+        ```
+        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
+        ```
+
+        #### &#8595;
+
+        #### ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ
+
+        #### &#8595;
+
+        #### ĻĺķğÅĝ»ķĚ¯ ĻğÓķĶĢ×ĸġ ÝĸĤãĸķ
+
+        #### &#8595;
+
+        #### Optimized vocabulary
+
+        """,
+    },
+    # Training a GPT
+    {
+        "header": "Training a GPT",
+        "content": """
+    | Dataset                            | Train tokens | Test tokens | Validation tokens |
+|------------------------------------|--------------|-------------|-------------------|
+| Basic (maestro only) ExponentialTimeTokenDataset |    7,071,232 |     645,120 |         788,480   |
+| Giant ExponentialTimeTokenDataset |   72,385,536 |     645,120 |         788,480   |
+| Basic (maestro only) AwesomeTokensDataset     |    2,614,272 |     241,152 |         288,256   |
+| Giant AwesomeTokensDataset     |   27,245,056 |     241,152 |         288,256   |
+    """,
     },
     # Model generated piece example
     {
@@ -239,10 +392,12 @@ slides = [
     },
     # Generated midi pitch
     {
+        "header": "Pitches of generated notes",
         "images": ["data/img/generated_pitch_comparison.png"],
     },
     # generated midi pitch compare
     {
+        "header": "Pitches of generated notes",
         "images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"],
     },
     # concatenated generations
@@ -251,11 +406,21 @@ slides = [
     },
     # Awesome Pitch
     {
+        "header": "ExponentialTimeTokenizer vs BPE tokeizer",
         "images": ["data/img/generated_pitch_comparison.png", "data/img/awesome_pitch_comparison.png"],
     },
     # Awesome chopin
     {
         "piece_paths": ["data/midi/f_major_gen_awesome_8.mid"],
+    },
+    # Future plans
+    {
+        "header": "Future plans",
+        "images": ["graphics3.jpg"],
+    },
+    # Pianoroll
+    {
+        "images": ["data/img/pianoroll_webpage.png"],
     },
     # links
     {
@@ -267,6 +432,8 @@ slides = [
     My Github: https://github.com/WojciechMat
 
     Presentation repo: https://github.com/Nospoko/midi-pydata-london-24
+
+    Pianoroll: https://pianoroll.io/
 
     Email: wmatejuk14@gmail.com
     """
