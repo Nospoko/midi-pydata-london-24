@@ -92,7 +92,7 @@ slides = [
     # Harmony
     {
         "header": '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"',
-        "images": ["data/img/harmonics.png"],
+        "images": ["data/img/pythagoras.png"],
     },
     # Hiller
     {
@@ -212,14 +212,14 @@ slides = [
         """,
         "pieces": [piece],
     },
+    # duration
+    {
+        "images": ["data/img/duration_comparison.png"],
+    },
     # dstart
     {
         "code": 'piece.df["dstart"] = piece.df.start.diff().shift(-1)',
         "images": ["data/img/dstart_comparison.png"],
-    },
-    # duration
-    {
-        "images": ["data/img/duration_comparison.png"],
     },
     # pitch
     {
@@ -262,7 +262,52 @@ slides = [
         ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
         """,
     },
-    # quantization
+    # Quantization example on velocities
+    {
+        "content": """
+    ```py
+    def plot_original_velocity_data(df: pd.DataFrame) -> None:
+        fig, ax = plt.subplots()
+        ax.scatter(df['start'], df['velocity'], color='blue')
+        ax.set_xlabel('Note Start Time')
+        ax.set_ylabel('Velocity')
+        ax.set_title('Original Velocity Data')
+        plt.show()
+    ```
+    """,
+        "images": ["data/img/original_velocities.png"],
+    },
+    {
+        "content": """
+        ```py
+        def find_dataset_velocity_bin_edges(pieces: List[ff.MidiPiece], n_bins: int = 3) -> np.ndarray:
+            velocities = np.hstack([p.df.velocity.values for p in pieces])
+            quantiles = np.linspace(0, 1, num=n_bins + 1)
+            bin_edges = np.quantile(velocities, quantiles)
+            bin_edges[0] = 0
+            bin_edges[-1] = 128
+            return bin_edges
+        ```
+        ```plaintext
+        Velocity Bin Edges: [  0.  48.  60.  71.  82. 128.]
+        ```
+        """,
+        "images": ["data/img/velocities_with_bin_edges.png"],
+    },
+    {
+        "content": """
+            ```py
+            df["velocity_bin"] = np.digitize(
+                x=df['velocity'],
+                bins=velocity_bin_edges,
+            ) - 1
+            ```
+            """,
+        "images": ["data/img/velocity_binned.png"],
+    },
+    {
+        "images": ["data/img/quantization_with_edges.png"],
+    },
     {
         "header": "Quantisation",
         "content": """
