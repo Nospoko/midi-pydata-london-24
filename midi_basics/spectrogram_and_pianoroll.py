@@ -45,7 +45,7 @@ def plot_spectrogram():
 
 
 def plot_pianoroll():
-    piece = ff.MidiPiece.from_file(path="data/midi/generated_midi.mid")
+    piece = ff.MidiPiece.from_file(path="data/midi/generated_midi.mid")[53:58]
     figres = FigureResolution(1920, 1080, dpi=120)
     fig = ff.view.draw_pianoroll_with_velocities(midi_piece=piece, figres=figres)
     return fig
@@ -54,5 +54,6 @@ def plot_pianoroll():
 if __name__ == "__main__":
     spec = plot_spectrogram()
     pianoroll = plot_pianoroll()
-    spec.savefig("data/img/spectrogram.png")
-    pianoroll.savefig("data/img/pianoroll.png")
+    plt.show()
+    # spec.savefig("data/img/spectrogram.png")
+    # pianoroll.savefig("data/img/pianoroll.png")

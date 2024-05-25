@@ -106,6 +106,10 @@ slides = [
     {
         "images": ["data/img/piano.jpg"],
     },
+    # pedals
+    {
+        "images": ["data/img/pedals.jpg"],
+    },
     # Scores
     {
         "images": ["data/img/scores.png"],
@@ -132,28 +136,52 @@ slides = [
     {
         "header": "Musical Instrument Digital Interface",
         "content": """
-        ```plaintext
-        0, 0, Header, 1, 1, 480
-        1, 0, Start_track
-        1, 0, Tempo, 500000
-        1, 0, Time_signature, 4, 2, 24, 8
-        1, 0, Program_c, 0, 0
-        1, 0, Note_on_c, 0, 60, 127
-        1, 480, Note_off_c, 0, 60, 0
-        1, 480, Note_on_c, 0, 62, 127
-        1, 960, Note_off_c, 0, 62, 0
-        1, 960, Note_on_c, 0, 64, 127
-        1, 1440, Note_off_c, 0, 64, 0
-        1, 1440, Program_c, 0, 41
-        1, 1440, Note_on_c, 0, 55, 127
-        1, 1920, Note_off_c, 0, 55, 0
-        1, 1920, Note_on_c, 0, 57, 127
-        1, 2400, Note_off_c, 0, 57, 0
-        1, 2400, Note_on_c, 0, 59, 127
-        1, 2880, Note_off_c, 0, 59, 0
-        1, 2880, End_track
-        0, 0, End_of_file
-        ```
+        0, 0, Header, 1, 1, 480<br>
+        1, 0, Start_track<br>
+        1, 0, Tempo, 500000<br>
+        1, 0, Time_signature, 4, 2, 24, 8<br>
+        1, 0, Program_c, 0, 0<br>
+        1, 0, Note_on_c, 0, 60, 127<br>
+        1, 480, Note_off_c, 0, 60, 0<br>
+        1, 480, Note_on_c, 0, 62, 127<br>
+        1, 960, Note_off_c, 0, 62, 0<br>
+        1, 960, Note_on_c, 0, 64, 127<br>
+        1, 1440, Note_off_c, 0, 64, 0<br>
+        1, 1440, Program_c, 0, 41<br>
+        1, 1440, Note_on_c, 0, 55, 127<br>
+        1, 1920, Note_off_c, 0, 55, 0<br>
+        1, 1920, Note_on_c, 0, 57, 127<br>
+        1, 2400, Note_off_c, 0, 57, 0<br>
+        1, 2400, Note_on_c, 0, 59, 127<br>
+        1, 2880, Note_off_c, 0, 59, 0<br>
+        1, 2880, End_track<br>
+        0, 0, End_of_file<br>
+
+    """,
+    },
+    {
+        "header": "Musical Instrument Digital Interface",
+        "content": """
+            0, 0, Header, 1, 1, 480<br>
+            1, 0, Start_track<br>
+            1, 0, Tempo, 500000<br>
+            1, 0, Time_signature, 4, 2, 24, 8<br>
+            1, 0, Program_c, 0, 0<br>
+            <span style="color:red;">1, 0, Note_on_c, 0, 60, 127</span><br>
+            1, 480, Note_off_c, 0, 60, 0<br>
+            <span style="color:red;">1, 480, Note_on_c, 0, 62, 127</span><br>
+            1, 960, Note_off_c, 0, 62, 0<br>
+            <span style="color:red;">1, 960, Note_on_c, 0, 64, 127</span><br>
+            1, 1440, Note_off_c, 0, 64, 0<br>
+            1, 1440, Program_c, 0, 41<br>
+            <span style="color:red;">1, 1440, Note_on_c, 0, 55, 127</span><br>
+            1, 1920, Note_off_c, 0, 55, 0<br>
+            <span style="color:red;">1, 1920, Note_on_c, 0, 57, 127</span><br>
+            1, 2400, Note_off_c, 0, 57, 0<br>
+            <span style="color:red;">1, 2400, Note_on_c, 0, 59, 127</span><br>
+            1, 2880, Note_off_c, 0, 59, 0<br>
+            1, 2880, End_track<br>
+            0, 0, End_of_file<br>
         """,
     },
     # MIDI to DataFrame Conversion
@@ -261,6 +289,9 @@ slides = [
         #### Quantisation
         ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
         """,
+    },
+    {
+        "images": ["data/img/dstart_and_duration.png"],
     },
     # Quantization example on velocities
     {
@@ -513,7 +544,10 @@ def main():
     if "code" in slide:
         st.code(slide["code"], language="python")
     if "content" in slide:
-        st.write(slide["content"])
+        st.write(
+            slide["content"],
+            unsafe_allow_html=True,
+        )
     if "dataframe" in slide:
         st.write(slide["dataframe"])
     if "images" in slide:
