@@ -4,7 +4,8 @@ import streamlit as st
 import streamlit_pianoroll
 from datasets import load_dataset
 
-from tokenization.tokenization import NoLossTokenizer
+from modelling.augmentation import augmentation_review
+from tokenization.tokenization import ExponentialTimeTokenizer
 
 
 @st.cache_data
@@ -41,7 +42,7 @@ original_piece, generated_piece = prepare_generated_piece()
 def prepare_tokens():
     path = "data/midi/example.mid"
     piece = ff.MidiPiece.from_file(path=path)
-    tokenizer = NoLossTokenizer()
+    tokenizer = ExponentialTimeTokenizer()
     tokens = tokenizer.tokenize(notes=piece.df)
 
     untokenized_notes = tokenizer.untokenize(tokens=tokens)
@@ -115,16 +116,25 @@ slides = [
         "images": ["data/img/scores.png"],
     },
     # Scored piece
-    {"images": ["data/img/scores.png"], "piece_paths": ["data/midi/scored_piece.mid"]},
+    {
+        "images": ["data/img/scores.png"],
+        "piece_paths": ["data/midi/scored_piece.mid"],
+    },
     # piano performance
     {
         "video": "data/Yuja_Wang.mp4",
     },
     # Spectrogram solo
-    {"header": "Spectrograms vs. MIDI", "images": ["data/img/spectrogram.png"]},
+    {
+        "header": "Spectrograms vs. MIDI",
+        "images": ["data/img/spectrogram.png"],
+    },
     # Spectrograms vs. MIDI
     {
-        "images": ["data/img/spectrogram.png", "data/img/pianoroll.png"],
+        "images": [
+            "data/img/spectrogram.png",
+            "data/img/pianoroll.png",
+        ],
     },
     # Yuja Wang in midi by Basic Pitch
     {
@@ -257,37 +267,32 @@ slides = [
     {
         "header": "Modelling piano performances with Large Language Models",
     },
+    # Augmentation
     {
-        "header": "Modelling piano performances with Large Language Models",
+        "header": "Augmentation",
         "content": """
-        #### Data
-        Maestro dataset:
-        https://magenta.tensorflow.org/datasets/maestro
-        """,
+            #### Pitch shifting
+            ```py
+            def pitch_shift(df: pd.DataFrame, shift: int = 5) -> pd.DataFrame:
+                df.pitch += shift
+                return df, shift
+            ```
+            #### Speed change
+            ```py
+            def change_speed(df: pd.DataFrame, factor: float = None) -> pd.DataFrame:
+                df.start /= factor
+                df.end /= factor
+                df.duration = df.end - df.start
+                return df
+            """,
     },
+    # Quantization
     {
-        "header": "Modelling piano performances with Large Language Models",
+        "header": "Quantization",
         "content": """
-        #### Data
-        Maestro dataset:
-        https://magenta.tensorflow.org/datasets/maestro
-        #### Augmentation
-        This time with feeling:
-        https://arxiv.org/abs/1808.03715
-
-        """,
-    },
-    {
-        "header": "Modelling piano performances with Large Language Models",
-        "content": """
-        #### Data
-        Maestro dataset:
-        https://magenta.tensorflow.org/datasets/maestro
-        #### Augmentation
-        This time with feeling:
-        https://arxiv.org/abs/1808.03715
-        #### Quantisation
+        ```py
         ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
+        ```
         """,
     },
     {
@@ -541,6 +546,13 @@ def main():
             st.write(piece.source)
             streamlit_pianoroll.from_fortepyan(piece=piece)
             return
+        if slide["header"] == "Augmentation":
+            idx = st.number_input(label="record id", value=77)
+            record = dataset[idx]
+            piece = ff.MidiPiece.from_huggingface(record=record)
+            st.write(piece.source)
+            augmentation_review(piece=piece)
+
     if "code" in slide:
         st.code(slide["code"], language="python")
     if "content" in slide:

@@ -83,7 +83,7 @@ class MidiTokenizer:
         return token_ids
 
 
-class NoLossTokenizer(MidiTokenizer):
+class ExponentialTimeTokenizer(MidiTokenizer):
     def __init__(
         self,
         min_time_unit: float = 0.01,
@@ -106,10 +106,10 @@ class NoLossTokenizer(MidiTokenizer):
         self.velocity_bin_edges = np.linspace(0, 127, num=n_velocity_bins + 1, endpoint=True).astype(int)
         self._build_velocity_decoder()
         self.token_to_id = {token: it for it, token in enumerate(self.vocab)}
-        self.name = "NoLossTokenizer"
+        self.name = "ExponentialTimeTokenizer"
 
     def __rich_repr__(self):
-        yield "NoLossTokenizer"
+        yield "ExponentialTimeTokenizer"
         yield "min_time_unit", self.min_time_unit
         yield "vocab_size", self.vocab_size
 
@@ -123,7 +123,7 @@ class NoLossTokenizer(MidiTokenizer):
 
     def _build_vocab(self):
         """
-        Build the vocabulary of the NoLossTokenizer,
+        Build the vocabulary of the ExponentialTimeTokenizer,
         including special tokens, note tokens, velocity tokens, and time tokens.
         """
         self.vocab = list(self.special_tokens)
@@ -267,6 +267,7 @@ class NoLossTokenizer(MidiTokenizer):
         list[str]: The list of time tokens.
         """
         notes = self.quantize_frame(notes)
+
         tokens = []
         # Time difference between current and previous events
         previous_time = 0
