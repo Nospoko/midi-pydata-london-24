@@ -91,10 +91,10 @@ class ExponentialTimeTokenizer(MidiTokenizer):
         special_tokens: list[str] = None,
     ):
         """
-        Initialize the NoLossTokenizer with specified time unit, velocity bins, and special tokens.
+        Initialize the ExponentialTimeTokenizer with specified time unit, velocity bins, and special tokens.
 
         Parameters:
-        min_time_unit (float): The minimum time unit for quantizing time. Defaults to 0.001.
+        min_time_unit (float): The minimum time unit for quantizing time. Defaults to 0.01.
         n_velocity_bins (int): The number of velocity bins. Defaults to 128.
         special_tokens (list[str]): A list of special tokens. Defaults to None.
         """
@@ -258,13 +258,13 @@ class ExponentialTimeTokenizer(MidiTokenizer):
 
     def tokenize(self, notes: pd.DataFrame) -> list[str]:
         """
-        Convert a time difference into a sequence of time tokens.
+        Convert a dataframe of notes into a sequence of tokens.
 
         Parameters:
-        dt (float): The time difference to convert.
+        dt (float): The notes to convert.
 
         Returns:
-        list[str]: The list of time tokens.
+        list[str]: The list of tokens.
         """
         notes = self.quantize_frame(notes)
 
