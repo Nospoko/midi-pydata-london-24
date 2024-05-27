@@ -99,7 +99,7 @@ def select_dataset():
     return dataset
 
 
-def select_record(midi_dataset: Dataset):
+def select_record(midi_dataset: Dataset, key: int = 0):
     source_df = midi_dataset.to_pandas()
     source_df["source"] = source_df["source"].map(lambda source: yaml.safe_load(source))
     source_df["composer"] = [source["composer"] for source in source_df.source]
@@ -111,6 +111,7 @@ def select_record(midi_dataset: Dataset):
         label="Select composer",
         options=composers,
         index=3,
+        key=f"select_composer_{key}",
     )
 
     ids = source_df.composer == selected_composer
@@ -118,6 +119,7 @@ def select_record(midi_dataset: Dataset):
     selected_title = st.selectbox(
         label="Select title",
         options=piece_titles,
+        key=f"select_title_{key}",
     )
     st.write(selected_title)
 

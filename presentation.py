@@ -61,6 +61,16 @@ maestro_description = pd.DataFrame(
     }
 )
 
+exponential_time_tokens = {
+    "1T": "10ms",
+    "2T": "20ms",
+    "3T": "40ms",
+    "4T": "80ms",
+    "5T": "160ms",
+    "6T": "320ms",
+    "7T": "640ms",
+}
+
 
 # Initialize session state
 if "slide" not in st.session_state:
@@ -90,47 +100,59 @@ slides = [
     Email: wmatejuk14@gmail.com
     """,
     },
-    # Harmony
+    # Pythagoreans
     {
         "header": '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"',
         "images": ["data/img/pythagoras.png"],
     },
+    {
+        "header": "Algorithmic music composition 1 ",
+        "images": {"data/img/mozart_table.png"},
+    },
     # Hiller
     {
+        "header": "Algorithmic music composition 2",
         "images": ["data/img/hiller.jpg"],
     },
     # Cage
     {
+        "header": "Algorithmic music composition",
         "images": ["data/img/cage.jpg"],
     },
     # Piano
     {
-        "images": ["data/img/piano.jpg"],
+        "header": "Piano",
+        "images": ["data/img/graphics3.jpg"],
     },
     # pedals
     {
+        "header": "Pedals",
         "images": ["data/img/pedals.jpg"],
     },
     # Scores
     {
+        "header": "Scores sheet 1",
         "images": ["data/img/scores.png"],
     },
     # Scored piece
     {
+        "header": "Scores sheet 2",
         "images": ["data/img/scores.png"],
         "piece_paths": ["data/midi/scored_piece.mid"],
     },
     # piano performance
     {
+        "header": "Yuja Wang - Flight of a Bublebee",
         "video": "data/Yuja_Wang.mp4",
     },
     # Spectrogram solo
     {
-        "header": "Spectrograms vs. MIDI",
+        "header": "Spectrograms vs. MIDI 1",
         "images": ["data/img/spectrogram.png"],
     },
     # Spectrograms vs. MIDI
     {
+        "header": "Spectrograms vs MIDI 2",
         "images": [
             "data/img/spectrogram.png",
             "data/img/pianoroll.png",
@@ -139,60 +161,8 @@ slides = [
     # Yuja Wang in midi by Basic Pitch
     {
         "header": "Yuja Wang transcribed by Basic Pitch",
-        "video": "data/Yuja_Wang.mp4",
+        # "video": "data/Yuja_Wang.mp4",
         "piece_paths": ["data/midi/yuja_wang.mid"],
-    },
-    # MIDI sequence
-    {
-        "header": "Musical Instrument Digital Interface",
-        "content": """
-        0, 0, Header, 1, 1, 480<br>
-        1, 0, Start_track<br>
-        1, 0, Tempo, 500000<br>
-        1, 0, Time_signature, 4, 2, 24, 8<br>
-        1, 0, Program_c, 0, 0<br>
-        1, 0, Note_on_c, 0, 60, 127<br>
-        1, 480, Note_off_c, 0, 60, 0<br>
-        1, 480, Note_on_c, 0, 62, 127<br>
-        1, 960, Note_off_c, 0, 62, 0<br>
-        1, 960, Note_on_c, 0, 64, 127<br>
-        1, 1440, Note_off_c, 0, 64, 0<br>
-        1, 1440, Program_c, 0, 41<br>
-        1, 1440, Note_on_c, 0, 55, 127<br>
-        1, 1920, Note_off_c, 0, 55, 0<br>
-        1, 1920, Note_on_c, 0, 57, 127<br>
-        1, 2400, Note_off_c, 0, 57, 0<br>
-        1, 2400, Note_on_c, 0, 59, 127<br>
-        1, 2880, Note_off_c, 0, 59, 0<br>
-        1, 2880, End_track<br>
-        0, 0, End_of_file<br>
-
-    """,
-    },
-    {
-        "header": "Musical Instrument Digital Interface",
-        "content": """
-            0, 0, Header, 1, 1, 480<br>
-            1, 0, Start_track<br>
-            1, 0, Tempo, 500000<br>
-            1, 0, Time_signature, 4, 2, 24, 8<br>
-            1, 0, Program_c, 0, 0<br>
-            <span style="color:red;">1, 0, Note_on_c, 0, 60, 127</span><br>
-            1, 480, Note_off_c, 0, 60, 0<br>
-            <span style="color:red;">1, 480, Note_on_c, 0, 62, 127</span><br>
-            1, 960, Note_off_c, 0, 62, 0<br>
-            <span style="color:red;">1, 960, Note_on_c, 0, 64, 127</span><br>
-            1, 1440, Note_off_c, 0, 64, 0<br>
-            1, 1440, Program_c, 0, 41<br>
-            <span style="color:red;">1, 1440, Note_on_c, 0, 55, 127</span><br>
-            1, 1920, Note_off_c, 0, 55, 0<br>
-            <span style="color:red;">1, 1920, Note_on_c, 0, 57, 127</span><br>
-            1, 2400, Note_off_c, 0, 57, 0<br>
-            <span style="color:red;">1, 2400, Note_on_c, 0, 59, 127</span><br>
-            1, 2880, Note_off_c, 0, 59, 0<br>
-            1, 2880, End_track<br>
-            0, 0, End_of_file<br>
-        """,
     },
     # MIDI to DataFrame Conversion
     {
@@ -235,7 +205,7 @@ slides = [
     },
     # Visualizing and Listening to MIDI Files
     {
-        "header": "Visualizing and Listening to MIDI Files",
+        "header": "Visualising and Listening to MIDI Files",
         "code": """
         import fortepyan as ff
         import streamit_pianoroll
@@ -252,15 +222,18 @@ slides = [
     },
     # duration
     {
+        "header": "Duration distribution",
         "images": ["data/img/duration_comparison.png"],
     },
     # dstart
     {
+        "header": "Dstart distribution",
         "code": 'piece.df["dstart"] = piece.df.start.diff().shift(-1)',
         "images": ["data/img/dstart_comparison.png"],
     },
     # pitch
     {
+        "header": "Pitch distribution",
         "images": ["data/img/pitch_comparison.png"],
     },
     # Modelling
@@ -288,7 +261,7 @@ slides = [
     },
     # Quantization
     {
-        "header": "Quantization",
+        "header": "One token per note",
         "content": """
         ```py
         ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
@@ -296,10 +269,12 @@ slides = [
         """,
     },
     {
+        "header": "Dstart and duration",
         "images": ["data/img/dstart_and_duration.png"],
     },
     # Quantization example on velocities
     {
+        "header": "Velocities",
         "content": """
     ```py
     def plot_original_velocity_data(df: pd.DataFrame) -> None:
@@ -314,6 +289,7 @@ slides = [
         "images": ["data/img/original_velocities.png"],
     },
     {
+        "header": "Velocities with bin edges",
         "content": """
         ```py
         def find_dataset_velocity_bin_edges(pieces: List[ff.MidiPiece], n_bins: int = 3) -> np.ndarray:
@@ -331,6 +307,7 @@ slides = [
         "images": ["data/img/velocities_with_bin_edges.png"],
     },
     {
+        "header": "Velocity bins",
         "content": """
             ```py
             df["velocity_bin"] = np.digitize(
@@ -342,18 +319,11 @@ slides = [
         "images": ["data/img/velocity_binned.png"],
     },
     {
+        "header": "Quantization 1",
         "images": ["data/img/quantization_with_edges.png"],
     },
     {
-        "header": "Quantisation",
-        "content": """
-        ```py
-        ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
-        ```
-        """,
-    },
-    {
-        "header": "Quantisation",
+        "header": "Quantization 2",
         "content": """
         ```py
         ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
@@ -365,9 +335,35 @@ slides = [
         "header": "Initial experiments",
         "images": ["data/img/graphics2.jpg"],
     },
-    # NoLossTokenizer
+    # ExponentialTimeTokenizer
     {
+        "header": "ExponentialTimeTokenizer",
         "code": tokens[:20],
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:20],
+        "content": exponential_time_tokens,
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:0],
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:1],
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:2],
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:3],
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:4],
     },
     {
         "piece_paths": ["data/midi/example.mid"],
@@ -469,21 +465,26 @@ slides = [
     # Model generated piece example
     {
         "header": "Mozart and GPT",
+        "content": """
+            Model size: 302M<br>
+            Tokenizer: ExponentialTimeTokenier<br>
+            Input size: 512<br>
+            """,
         "dual_piece": (original_piece, generated_piece),
     },
     # Generated midi pitch
     {
-        "header": "Pitches of generated notes",
+        "header": "Pitches of generated notes 1",
         "images": ["data/img/generated_pitch_comparison.png"],
     },
     # generated midi pitch compare
     {
-        "header": "Pitches of generated notes",
+        "header": "Pitches of generated notes 2",
         "images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"],
     },
     # concatenated generations
     {
-        "piece_paths": ["data/midi/f_major_gen_1.mid"],
+        "piece_paths": ["data/midi/d_minor_gen.mid"],
     },
     # Awesome Pitch
     {
@@ -492,12 +493,12 @@ slides = [
     },
     # Awesome chopin
     {
-        "piece_paths": ["data/midi/f_major_gen_awesome_8.mid"],
+        "piece_paths": ["data/midi/d_minor_gen_awesome_9.mid"],
     },
     # Future plans
     {
         "header": "Future plans",
-        "images": ["graphics3.jpg"],
+        "images": ["data/img/piano.jpg"],
     },
     # Pianoroll
     {
