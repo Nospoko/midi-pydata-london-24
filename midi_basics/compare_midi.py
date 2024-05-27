@@ -14,22 +14,42 @@ def plot_histogram(
     ylabel: str,
     title: str,
     bins: np.ndarray,
-):
+) -> tuple[plt.Figure, plt.Axes]:
     """Utility function to plot histograms for comparison."""
     width_px = 1920
     height_px = 1080
+
     dpi = 120
+
     fig_width = width_px / dpi
     fig_height = height_px / dpi
     figsize = (fig_width, fig_height)
 
-    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
-    ax.hist(data1, bins=bins, color="turquoise", label=label1)
-    ax.hist(data2, bins=bins, alpha=0.6, color="orange", label=label2)
+    fig, ax = plt.subplots(
+        figsize=figsize,
+        dpi=dpi,
+    )
+    ax.hist(
+        data1,
+        bins=bins,
+        color="turquoise",
+        label=label1,
+    )
+    ax.hist(
+        data2,
+        bins=bins,
+        alpha=0.6,
+        color="orange",
+        label=label2,
+    )
     ax.set_title(title, fontsize=16)
     ax.set_xlabel(xlabel, fontsize=14)
     ax.set_ylabel(ylabel, fontsize=14)
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2), fontsize=12)
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.2),
+        fontsize=12,
+    )
     ax.grid(True, linestyle="--", linewidth=0.5)
     plt.legend()
     return fig, ax

@@ -76,21 +76,21 @@ streamlit_pianoroll.from_fortepyan(piece=piece)
 ```
 
 ```shell
-streamlit run midi_basics.streamlit_piece.py
+streamlit run midi_basics/streamlit_piece.py
 ```
 
 ## Comparing MIDI Pieces
 
-### Plotting Note Pitches Comparison
+### Plotting Note Pitches Comparison and Note Dstart Comparison
 
 We can compare the distribution of note pitches between two MIDI pieces using matplotlib histograms.
 This can provide insights into the pitch range and distribution within each piece.
 
 ```shell
-python midi_basics/two_performances.py
+python -m streamlit run --server.port 4014 midi_basics/compare_pieces.py
 ```
 
-![alt text](data/img/pitch_comparison.png)
+![pitch comparison](data/img/pitch_comparison.png)
 
 ### Duration Distribution Comparison
 
@@ -98,10 +98,51 @@ You can compare the distribution of note durations between MIDI pieces composed 
  This comparison helps in understanding the temporal characteristics of musical compositions and may reveal stylistic differences or compositional preferences.
 
 ```shell
-python midi_basics/compare_composers.py
+python -m streamlit run --server.port 4015 midi_basics/compare_composers.py
 ```
 
-![alt text](data/img/duration_comparison.png)
+![duration comparison](data/img/duration_comparison.png)
+
+### Comparing Dstart Distributions from .mid files
+
+```shell
+python -m  midi_basics.compare_midi path/to/midi1.mid path/to/midi2.mid
+```
+### Tokenization
+This code loads a maestro dataset, converts it into MIDI pieces, and calculates bin edges for note duration, velocity, and time differences between note starts (dstart). It then digitizes these values into bins. Finally, it plots both the original and digitized note data to visually analyze the distributions and quantized representations.
+```shell
+python tokenization/full_quantization_example.py
+```
+This is an example step-by-step on only velocity:
+```shell
+python tokenization/full_quantization_example.py
+```
+
+## Modelling
+### Augmentation
+Augmentation review:
+```shell
+python -m streamlit run --server.port 4016 modelling/augmentation.py
+```
+
+### Note range extraction
+Predicting a sub-sequence of notes within defined range from a sequence of notes deproved of it is
+an interesting downstream task and a possible benchmark task. The results of generating them with a model can be interesting,
+as they show the model's understanding of musical structure and harmony.
+
+Here is a review of the sub-sequence extraction
+
+```shell
+python -m streamlit run --server.port 4017 modelling/extract_notes.py
+```
+| Voice    | Range ( in pitch value )|
+|----------|-----------|
+| BASS     | 21-48     |
+| TENOR    | 43-81     |
+| ALTO     | 53-84     |
+| SOPRANO  | 60-96     |
+| TREBLE   | 60-108    |
+
 
 ### Deployment
 
