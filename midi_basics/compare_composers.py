@@ -1,4 +1,5 @@
 import yaml
+import numpy as np
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -26,17 +27,19 @@ def load_and_prepare_dataset():
 
 
 def plot_duration_distribution(
-    first_composer_notes,
-    second_composer_notes,
-    composer1,
-    composer2,
+    first_composer_notes: np.ndarray,
+    second_composer_notes: np.ndarray,
+    composer1: str,
+    composer2: str,
 ):
     """
     Plot the duration distribution of notes for two composers.
     """
     # Sample data to improve plot readability
-    first_composer_notes = first_composer_notes.sample(50000)
-    second_composer_notes = second_composer_notes.sample(50000)
+    sample_size = min(len(first_composer_notes), len(second_composer_notes))
+    sample_size = int(0.9 * sample_size)
+    first_composer_notes = first_composer_notes.sample(sample_size)
+    second_composer_notes = second_composer_notes.sample(sample_size)
 
     # Plotting
     width_px = 1920
@@ -49,17 +52,18 @@ def plot_duration_distribution(
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     # Plot distributions
+    bins = np.linspace(0, 5, 1000)
     ax.set_title("Duration distribution")
     ax.hist(
         first_composer_notes.duration,
-        bins=1000,
+        bins=bins,
         color="turquoise",
         label=composer1,
     )
     ax.hist(
         second_composer_notes.duration,
         alpha=0.6,
-        bins=1000,
+        bins=bins,
         color="orange",
         label=composer2,
     )
@@ -72,7 +76,6 @@ def plot_duration_distribution(
 
 
 def main():
-    st.title("MIDI Composer Duration Distribution Comparison")
     st.write("Select two composers from the dropdown menu to compare their note duration distributions.")
 
     # Load and prepare dataset
@@ -81,21 +84,16 @@ def main():
     # List of unique composers in the dataset
     unique_composers = sorted(source_df["composer"].unique())
 
-    # Composer selection in the sidebar
-    composer1 = st.sidebar.selectbox(
+    composer1 = st.selectbox(
         "Select first composer:",
         unique_composers,
         index=unique_composers.index("Ludwig van Beethoven"),
     )
-    composer2 = st.sidebar.selectbox(
+    composer2 = st.selectbox(
         "Select second composer:",
         unique_composers,
         index=unique_composers.index("Frédéric Chopin"),
     )
-
-    if composer1 == composer2:
-        st.warning("Please select two different composers.")
-        return
 
     composer_dataframes = {
         composer1: [],

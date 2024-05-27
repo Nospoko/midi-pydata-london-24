@@ -7,15 +7,15 @@ from browse_dataset import select_record, select_dataset
 
 
 def plot_histogram(
-    data1,
-    data2,
-    label1,
-    label2,
-    xlabel,
-    ylabel,
-    title,
-    bins=88,
-):
+    data1: np.ndarray,
+    data2: np.ndarray,
+    label1: str,
+    label2: str,
+    xlabel: str,
+    ylabel: str,
+    title: str,
+    bins: np.ndarray,
+) -> tuple[plt.Figure, plt.Axes]:
     """Utility function to plot histograms for comparison."""
     width_px = 1920
     height_px = 1080
@@ -56,7 +56,7 @@ def plot_histogram(
     return fig, ax
 
 
-def main():
+def main() -> None:
     dataset = select_dataset()
     select_columns = st.columns(2)
 
@@ -68,8 +68,7 @@ def main():
     first_piece = ff.MidiPiece.from_huggingface(first_record)
     second_piece = ff.MidiPiece.from_huggingface(second_record)
 
-    # Get truncated titles for labels
-    def get_label(piece, max_length=30):
+    def get_label(piece: ff.MidiPiece) -> str:
         composer = piece.source.get("composer", "Unknown Composer")
         title = piece.source.get("title", "Unknown Title")
         return f"{title}, {composer}"
@@ -80,8 +79,8 @@ def main():
     # Plot pitch comparison
     bins = np.linspace(21, 109, num=89)
     fig, ax = plot_histogram(
-        data1=first_piece.df.pitch,
-        data2=second_piece.df.pitch,
+        data1=first_piece.df.pitch.values,
+        data2=second_piece.df.pitch.values,
         label1=label1,
         label2=label2,
         xlabel="Pitch",
@@ -97,8 +96,8 @@ def main():
     # Plot dstart comparison
     bins = np.linspace(0, 1.00, num=200)
     fig, ax = plot_histogram(
-        data1=first_piece.df.dstart.dropna(),
-        data2=second_piece.df.dstart.dropna(),
+        data1=first_piece.df.dstart.dropna().values,
+        data2=second_piece.df.dstart.dropna().values,
         label1=label1,
         label2=label2,
         xlabel="Time Difference (s)",
