@@ -10,10 +10,11 @@ def main():
     record = select_record(midi_dataset=dataset)
 
     piece = ff.MidiPiece.from_huggingface(record=record)
+    high = st.number_input(label="high pitch", value=60)
     low = st.number_input(label="low pitch", value=0)
-    high = st.number_input(label="high pitch", value=48)
-    notes_deprived = piece.df[piece.df.pitch > high | piece.df.pitch < low]
-    notes_extracted = piece.df[piece.df.pitch <= high & piece.df.pitch >= low]
+    note_ids = (piece.df.pitch <= high) & (piece.df.pitch >= low)
+    notes_deprived = piece.df[~note_ids]
+    notes_extracted = piece.df[note_ids]
 
     piece_deprived = ff.MidiPiece(notes_deprived)
     piece_extracted = ff.MidiPiece(notes_extracted)

@@ -108,6 +108,39 @@ def main() -> None:
     ax.set_xlim((0, 0.4))
     st.pyplot(fig)
 
+    # Plot distributions
+    bins = np.linspace(0, 5, 1000)
+    fig, ax = plot_histogram(
+        data1=first_piece.df.duration,
+        data2=second_piece.df.duration,
+        label1=label1,
+        label2=label2,
+        xlabel="Duration (s)",
+        ylabel="Frequency",
+        title="Note Duration Distribution",
+        bins=bins,
+    )
+    ax.set_xlim(0, 1)  # Limit x-axis for better visualization
+
+    fig.subplots_adjust(bottom=0.3, wspace=0.33)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2))
+    st.pyplot(fig)
+
+    bins = np.linspace(0, 127, 128, endpoint=True)
+    fig, ax = plot_histogram(
+        data1=first_piece.df.velocity,
+        data2=second_piece.df.velocity,
+        label1=label1,
+        label2=label2,
+        xlabel="Velocity",
+        ylabel="Frequency",
+        title="Key-press Velocity Distribution",
+        bins=bins,
+    )
+    fig.subplots_adjust(bottom=0.3, wspace=0.33)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2))
+    st.pyplot(fig)
+
 
 if __name__ == "__main__":
     main()

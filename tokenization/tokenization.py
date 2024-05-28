@@ -103,7 +103,7 @@ class ExponentialTimeTokenizer(MidiTokenizer):
         self.n_velocity_bins = n_velocity_bins
         self._build_vocab()
 
-        self.velocity_bin_edges = np.linspace(0, 127, num=n_velocity_bins + 1, endpoint=True).astype(int)
+        self.velocity_bin_edges = np.linspace(0, 128, num=n_velocity_bins + 1, endpoint=True).astype(int)
         self._build_velocity_decoder()
         self.token_to_id = {token: it for it, token in enumerate(self.vocab)}
         self.name = "ExponentialTimeTokenizer"
@@ -206,7 +206,7 @@ class ExponentialTimeTokenizer(MidiTokenizer):
         self.bin_to_velocity = []
         for it in range(1, len(self.velocity_bin_edges)):
             velocity = (self.velocity_bin_edges[it - 1] + self.velocity_bin_edges[it]) / 2
-            self.bin_to_velocity.append(int(velocity))
+            self.bin_to_velocity.append(np.round(velocity))
 
     @staticmethod
     def _notes_to_events(notes: pd.DataFrame) -> list[dict]:

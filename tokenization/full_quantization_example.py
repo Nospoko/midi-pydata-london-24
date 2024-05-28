@@ -149,6 +149,39 @@ def calculate_bins(
     return df
 
 
+def dequantize_bins(
+    df: pd.DataFrame,
+    dstart_bin_edges: np.ndarray,
+    duration_bin_edges: np.ndarray,
+    velocity_bin_edges: np.ndarray,
+) -> pd.DataFrame:
+    """
+    Dequantize the binned values back to their original range.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing binned note data.
+        dstart_bin_edges (np.ndarray): Bin edges for dstart values.
+        duration_bin_edges (np.ndarray): Bin edges for duration values.
+        velocity_bin_edges (np.ndarray): Bin edges for velocity values.
+
+    Returns:
+        pd.DataFrame: DataFrame with dequantized values.
+    """
+    # Calculate bin midpoints
+    dstart_midpoints = (dstart_bin_edges[:-1] + dstart_bin_edges[1:]) / 2
+    dstart_midpoints = np.append(dstart_midpoints, dstart_bin_edges[-1])
+    duration_midpoints = (duration_bin_edges[:-1] + duration_bin_edges[1:]) / 2
+    duration_midpoints = np.append(duration_midpoints, duration_bin_edges[-1])
+    velocity_midpoints = (velocity_bin_edges[:-1] + velocity_bin_edges[1:]) / 2
+
+    # Map bin indices to midpoints
+    df["dstart_dequantized"] = dstart_midpoints[df["dstart_bin"]]
+    df["duration_dequantized"] = duration_midpoints[df["duration_bin"]]
+    df["velocity_dequantized"] = velocity_midpoints[df["velocity_bin"]]
+
+    return df
+
+
 def plot_data(
     df: pd.DataFrame,
     dstart_bin_edges: np.ndarray,
@@ -299,6 +332,14 @@ def main() -> None:
 
     # Digitize the velocity, dstart, and duration data
     df = calculate_bins(
+        df=df,
+        dstart_bin_edges=dstart_bin_edges,
+        duration_bin_edges=duration_bin_edges,
+        velocity_bin_edges=velocity_bin_edges,
+    )
+    print(dstart_bin_edges)
+    # Dequantize the binned data
+    df = dequantize_bins(
         df=df,
         dstart_bin_edges=dstart_bin_edges,
         duration_bin_edges=duration_bin_edges,

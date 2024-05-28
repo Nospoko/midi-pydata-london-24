@@ -4,7 +4,7 @@ import streamlit as st
 import streamlit_pianoroll
 from datasets import load_dataset
 
-from modelling.augmentation import augmentation_review
+from modelling.extract_notes import main as benchmark_review
 from tokenization.tokenization import ExponentialTimeTokenizer
 
 
@@ -52,6 +52,7 @@ def prepare_tokens():
 
 untokenized_piece, tokens = prepare_tokens()
 
+
 maestro_description = pd.DataFrame(
     {
         "Split": ["Train", "Validation", "Test", "Total"],
@@ -76,6 +77,8 @@ exponential_time_tokens = {
 if "slide" not in st.session_state:
     st.session_state.slide = 0
 
+note_columns = ["pitch", "velocity", "start", "end", "duration"]
+piece.df = piece.df[note_columns]
 
 # Slide content
 slides = [
@@ -116,7 +119,7 @@ slides = [
     },
     # Cage
     {
-        "header": "Algorithmic music composition",
+        "header": "Algorithmic music composition 3",
         "images": ["data/img/cage.jpg"],
     },
     # Piano
@@ -129,6 +132,10 @@ slides = [
         "header": "Pedals",
         "images": ["data/img/pedals.jpg"],
     },
+    {
+        "header": "Why Piano?",
+        "images": ["data/img/graphics3.jpg"],
+    },
     # Scores
     {
         "header": "Scores sheet 1",
@@ -139,6 +146,10 @@ slides = [
         "header": "Scores sheet 2",
         "images": ["data/img/scores.png"],
         "piece_paths": ["data/midi/scored_piece.mid"],
+    },
+    {
+        "header": "Interpreting scores",
+        "images": ["data/img/note_duration_comparison0.png"],
     },
     # piano performance
     {
@@ -164,6 +175,10 @@ slides = [
         # "video": "data/Yuja_Wang.mp4",
         "piece_paths": ["data/midi/yuja_wang.mid"],
     },
+    {
+        "header": "MIDI output",
+        "images": ["data/img/midi_out.jpg"],
+    },
     # MIDI to DataFrame Conversion
     {
         "header": "Converting MIDI to DataFrame",
@@ -173,7 +188,7 @@ slides = [
         piece = ff.MidiPiece.from_file(path="data/midi/piano.mid")
         print(piece.df)
         """,
-        "dataframe": piece.df,
+        "dataframe": piece.df[note_columns],
     },
     # MIDI datasets
     {
@@ -236,20 +251,92 @@ slides = [
         "header": "Pitch distribution",
         "images": ["data/img/pitch_comparison.png"],
     },
+    {"header": "Formal vs informal vocabulary", "images": ["data/img/text_keys.png"]},
     # Modelling
     {
-        "header": "Modelling piano performances with Large Language Models",
+        "header": "LLM training pipeline",
+        "content": """
+        #### Overview
+
+       1. **Data Gathering** -> 2. **Data Augmentation** ->
+       3. **Tokenization** -> 4. **Pre-Training** -> 5. **Fine-Tuning**
+
+        ## Steps Involved
+
+        1. **Data Gathering**
+        - Examples: Web scraping, publicly available datasets, proprietary data.
+
+        2. **Data Augmentation**
+        - Examples: Data synthesis, noise addition, back-translation.
+
+        3. **Tokenization**
+        - Convert raw text into a sequence of tokens (subwords, words, or characters).
+
+        4. **Pre-Training**
+        - Examples: next-token-prediction, masked language modelling.
+
+        5. **Fine-Tuning**
+        - Examples: Text classification, question answering, text generation.
+        """,
     },
+    {
+        "header": "MIDI LLM training pipeline",
+        "content": """
+        #### Overview
+
+       1. **Data Gathering** -> 2. **Data Augmentation** ->
+       3. **Tokenization** -> 4. **Pre-Training** -> 5. **Fine-Tuning**
+
+        ## Steps Involved
+
+        1. **Data Gathering**
+        - Examples: Crowd-sourcing, buying recordings.
+
+        2. **Data Augmentation**
+        - Examples: Pitch-shifting, speed change.
+
+        3. **Tokenization**
+        - Convert MIDI data into a sequence of tokens (many methods to use!).
+
+        4. **Pre-Training**
+        - Examples: next-token-prediction, masked music modelling.
+
+        5. **Fine-Tuning**
+        - Examples: sub-sequence prediciton
+        """,
+    },
+    {
+        "header": "Modelling piano performances with Large Language Models",
+        "images": ["data/img/piano.jpg"],
+    },
+    {"header": "Dataset sizes comparison", "images": ["data/img/dataset_sizes.png"]},
     # Augmentation
     {
-        "header": "Augmentation",
+        "header": "Augmentation 1",
         "content": """
             #### Pitch shifting
             ```py
-            def pitch_shift(df: pd.DataFrame, shift: int = 5) -> pd.DataFrame:
+            def pitch_shift(df: pd.DataFrame, shift: int = 1) -> pd.DataFrame:
                 df.pitch += shift
                 return df, shift
             ```
+            """,
+    },
+    {
+        "header": "Augmentation 2",
+        "content": """
+            #### Pitch shifting
+            ```py
+            def pitch_shift(df: pd.DataFrame, shift: int = 1) -> pd.DataFrame:
+                df.pitch += shift
+                return df, shift
+            ```
+            """,
+        "images": ["data/img/pitch_shifted.png"],
+    },
+    {
+        "header": "Augmentation 3",
+        "content": """
             #### Speed change
             ```py
             def change_speed(df: pd.DataFrame, factor: float = None) -> pd.DataFrame:
@@ -258,6 +345,22 @@ slides = [
                 df.duration = df.end - df.start
                 return df
             """,
+    },
+    {
+        "header": "Augmentation 4",
+        "content": """
+            #### Speed change
+            ```py
+            def change_speed(df: pd.DataFrame, factor: float = None) -> pd.DataFrame:
+                df.start /= factor
+                df.end /= factor
+                df.duration = df.end - df.start
+                return df
+
+            piece = ff.MidiPiece.from_file("data/midi/d_minor_bach.mid")
+            change_speed(df=piece.df, factor=1.05)
+            """,
+        "piece_paths": ["data/midi/d_minor_bach.mid", "data/midi/d_minor_bach_speeded.mid"],
     },
     # Quantization
     {
@@ -272,55 +375,18 @@ slides = [
         "header": "Dstart and duration",
         "images": ["data/img/dstart_and_duration.png"],
     },
-    # Quantization example on velocities
-    {
-        "header": "Velocities",
-        "content": """
-    ```py
-    def plot_original_velocity_data(df: pd.DataFrame) -> None:
-        fig, ax = plt.subplots()
-        ax.scatter(df['start'], df['velocity'], color='blue')
-        ax.set_xlabel('Note Start Time')
-        ax.set_ylabel('Velocity')
-        ax.set_title('Original Velocity Data')
-        plt.show()
-    ```
-    """,
-        "images": ["data/img/original_velocities.png"],
-    },
-    {
-        "header": "Velocities with bin edges",
-        "content": """
-        ```py
-        def find_dataset_velocity_bin_edges(pieces: List[ff.MidiPiece], n_bins: int = 3) -> np.ndarray:
-            velocities = np.hstack([p.df.velocity.values for p in pieces])
-            quantiles = np.linspace(0, 1, num=n_bins + 1)
-            bin_edges = np.quantile(velocities, quantiles)
-            bin_edges[0] = 0
-            bin_edges[-1] = 128
-            return bin_edges
-        ```
-        ```plaintext
-        Velocity Bin Edges: [  0.  48.  60.  71.  82. 128.]
-        ```
-        """,
-        "images": ["data/img/velocities_with_bin_edges.png"],
-    },
-    {
-        "header": "Velocity bins",
-        "content": """
-            ```py
-            df["velocity_bin"] = np.digitize(
-                x=df['velocity'],
-                bins=velocity_bin_edges,
-            ) - 1
-            ```
-            """,
-        "images": ["data/img/velocity_binned.png"],
-    },
+    # Quantization
     {
         "header": "Quantization 1",
-        "images": ["data/img/quantization_with_edges.png"],
+        "content": """
+    ```py
+    def quantize_series(series, step_size) -> np.ndarray:
+        # Round the series to the nearest step size
+        quantized = np.round(series / step_size) * step_size
+        return quantized
+    ```
+    """,
+        "dataframe": pd.read_csv("data/quantization.csv", index_col=0),
     },
     {
         "header": "Quantization 2",
@@ -329,11 +395,44 @@ slides = [
         ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
         ```
         """,
-        "piece_paths": ["data/midi/example.mid", "data/midi/quantized_example.mid"],
     },
     {
         "header": "Initial experiments",
         "images": ["data/img/graphics2.jpg"],
+    },
+    {
+        "header": "Initial experiments",
+        "content": """
+        #### Initial Plan
+        - LLM for Seq-to-Seq
+        """,
+    },
+    {
+        "header": "Initial experiments",
+        "content": """
+        #### Initial Plan
+        - LLM for Seq-to-Seq
+
+        #### Experiments
+        - Diffusion Models
+        - VQ-VAE
+        - LLM for Note Pitches
+        """,
+    },
+    {
+        "header": "Initial experiments",
+        "content": """
+        #### Initial Plan
+        - LLM for Seq-to-Seq
+
+        #### Experiments
+        - Diffusion Models
+        - VQ-VAE
+        - LLM for Note Pitches
+
+        #### Final Experiment
+        - GPT for Seq-to-Seq
+        """,
     },
     # ExponentialTimeTokenizer
     {
@@ -347,23 +446,164 @@ slides = [
     },
     {
         "header": "ExponentialTimeTokenizer",
-        "code": tokens[:0],
+        "code": tokens[:20],
+        "content": """
+            #### Original Data:
+            | pitch | velocity |   start   |     end    |
+            |-------|----------|-----------|------------|
+            |   59  |    94    |  0.000000 |  0.072727  |
+            |   48  |    77    |  0.077273 |  0.177273  |
+            |   60  |    95    |  0.102273 |  0.229545  |
+            |   47  |    79    |  0.159091 |  0.275000  |
+            #### Split to events:
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  0.000000 |    note_on |
+            |    59 |       94 |  0.072727 |   note_off |
+            |    48 |       77 |  0.077273 |    note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
     },
     {
         "header": "ExponentialTimeTokenizer",
         "code": tokens[:1],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       <span style="color:red">94</span> |  0.000000 |    note_on |
+            |    59 |       94 |  0.072727 |   note_off |
+            |    48 |       77 |  0.077273 |    note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
     },
     {
         "header": "ExponentialTimeTokenizer",
         "code": tokens[:2],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    <span style="color:red">59</span> |       94 |  0.000000 |    <span style="color:red">note_on |
+            |    59 |       94 |  0.072727 |   note_off |
+            |    48 |       77 |  0.077273 |    note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
     },
     {
         "header": "ExponentialTimeTokenizer",
         "code": tokens[:3],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  <span style="color:red">0.000000 |    note_on |
+            |    59 |       94 |  <span style="color:red">0.072727</span> |   note_off |
+            |    48 |       77 |  0.077273 |    note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
     },
     {
         "header": "ExponentialTimeTokenizer",
-        "code": tokens[:4],
+        "code": tokens[:5],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  0.000000 |    note_on |
+            | <span style="color:red">59 | <span style="color:red">94 |  0.072727 | <span style="color:red">note_off |
+            |    48 |       77 |  0.077273 |    note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:5],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  0.000000 |    note_on |
+            |    59 |       94 |  <span style="color:red">0.072727 |   note_off |
+            |    48 |       77 |  <span style="color:red">0.077273 |    note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:7],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  0.000000 |    note_on |
+            |    59 |       94 |  0.072727 |   note_off |
+            | <span style="color:red">48 | <span style="color:red">77 |  0.077273 | <span style="color:red">note_on |
+            |    60 |       95 |  0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:8],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  0.000000 |    note_on |
+            |    59 |       94 |  0.072727 |   note_off |
+            |    48 |       77 |  <span style="color:red">0.077273 |    note_on |
+            |    60 |       95 |  <span style="color:red">0.102273 |    note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
+    },
+    {
+        "header": "ExponentialTimeTokenizer",
+        "code": tokens[:10],
+        "content": """
+            | pitch | velocity |      time | event_type |
+            |-------|----------|-----------|------------|
+            |    59 |       94 |  0.000000 |    note_on |
+            |    59 |       94 |  0.072727 |   note_off |
+            |    48 |       77 |  0.077273 |    note_on |
+            | <span style="color:red">60 | <span style="color:red">95 |  0.102273 | <span style="color:red">note_on |
+            |    47 |       79 |  0.159091 |    note_on |
+            |    48 |       77 |  0.177273 |   note_off |
+            |    60 |       95 |  0.229545 |   note_off |
+            |    47 |       79 |  0.275000 |   note_off |
+
+            """,
     },
     {
         "piece_paths": ["data/midi/example.mid"],
@@ -371,6 +611,10 @@ slides = [
         "code": tokens[:20],
     },
     # BPE
+    {
+        "header": "Tokenization in NLP",
+        "images": ["data/img/tokenization_nlp.png"],
+    },
     {
         "header": "BPE on MIDI data",
         "content": "#### Original MIDI data",
@@ -401,7 +645,8 @@ slides = [
 
         #### &#8595;
 
-        #### ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ
+        #### ["ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ"]
+
         """,
     },
     {
@@ -417,11 +662,11 @@ slides = [
 
         #### &#8595;
 
-        #### ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ
+        #### ["ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ"]
 
         #### &#8595;
 
-        #### ĻĺķğÅĝ»ķĚ¯ ĻğÓķĶĢ×ĸġ ÝĸĤãĸķ
+        #### ["ĻĺķğÅĝ»ķĚ¯", "ĻğÓķĶĢ×ĸġ", "ÝĸĤãĸķ"]
 
         """,
     },
@@ -438,15 +683,26 @@ slides = [
 
         #### &#8595;
 
-        #### ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ
+        #### ["ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ"]
 
         #### &#8595;
 
-        #### ĻĺķğÅĝ»ķĚ¯ ĻğÓķĶĢ×ĸġ ÝĸĤãĸķ
+        #### ["ĻĺķğÅĝ»ķĚ¯", "ĻğÓķĶĢ×ĸġ", "ÝĸĤãĸķ"]
 
         #### &#8595;
 
-        #### Optimized vocabulary
+        | Index | Token     |
+        |-------|-----------|
+        | 0     | ĹķĶğ      |
+        | 1     | Åĝ»ķ      |
+        | 2     | Ĺğ        |
+        | 3     | §         |
+        | 4     | ĹĶĝ       |
+        | 5     | ĶĢ×       |
+        | 6     | ĸķĶğ      |
+        | 7     | ġ     |
+        | 8     | ĸķğ       |
+        | 9     | ¨ġ§       |
 
         """,
     },
@@ -486,23 +742,51 @@ slides = [
     {
         "piece_paths": ["data/midi/d_minor_gen.mid"],
     },
-    # Awesome Pitch
-    {
-        "header": "ExponentialTimeTokenizer vs BPE tokeizer",
-        "images": ["data/img/generated_pitch_comparison.png", "data/img/awesome_pitch_comparison.png"],
-    },
-    # Awesome chopin
-    {
-        "piece_paths": ["data/midi/d_minor_gen_awesome_9.mid"],
-    },
     # Future plans
     {
         "header": "Future plans",
         "images": ["data/img/piano.jpg"],
     },
+    {"header": "Benchmark task example"},
+    {
+        "header": "Open Problems in Modelling Piano Performances",
+        "content": """
+            #### Effective Metrics
+            - Defining metrics to track training progress and compare models.
+            - Algorithmically determining if a musical piece sounds good and possesses the right structure.
+            - Examples:
+                - Assessing tempo consistency (approximating beats per minute).
+                - Checking if pitches are from the same key as the rest of the piece.
+
+            #### Algorithmic Music Generation
+            - Training models on algorithmically generated music.
+            - Combining real music performances with algorithmic composition.
+            - Exploring and discovering algorithms for creating music.
+
+            #### Call to Action
+            - https://pianoroll.io
+            """,
+    },
     # Pianoroll
     {
         "images": ["data/img/pianoroll_webpage.png"],
+    },
+    {
+        "header": "Conclusions",
+        "content": """
+            #### The Exciting World of Piano Performance Music
+            - Piano music - the universe of artistry and mathematical relationships.
+            - Transformer-based architectures might be just what we need.
+
+            #### Building Communities and Sharing Knowledge
+            - pianoroll.io
+
+            #### Future Prospects
+            - The future of algorithmic music seems bright.
+            - By focusing more resources and attention on this problem, we might create something truly remarkable.
+            - Humans have been discovering and understanding the mathematical nature of music for ages.
+
+            """,
     },
     # links
     {
@@ -539,20 +823,16 @@ def main():
     if "header" in slide:
         st.header(slide["header"])
         # Make Visualisation slide responsive
-        if slide["header"] == "Visualizing and Listening to MIDI Files":
+        if slide["header"] == "Visualising and Listening to MIDI Files":
             st.code(slide["code"], language="python")
             idx = st.number_input(label="record id", value=77)
             record = dataset[idx]
             piece = ff.MidiPiece.from_huggingface(record=record)
-            st.write(piece.source)
+            st.json(piece.source, expanded=False)
             streamlit_pianoroll.from_fortepyan(piece=piece)
             return
-        if slide["header"] == "Augmentation":
-            idx = st.number_input(label="record id", value=77)
-            record = dataset[idx]
-            piece = ff.MidiPiece.from_huggingface(record=record)
-            st.write(piece.source)
-            augmentation_review(piece=piece)
+        if slide["header"] == "Benchmark task example":
+            benchmark_review()
 
     if "code" in slide:
         st.code(slide["code"], language="python")

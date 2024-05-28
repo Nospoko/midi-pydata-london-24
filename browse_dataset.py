@@ -110,7 +110,7 @@ def select_record(midi_dataset: Dataset, key: int = 0):
     selected_composer = st.selectbox(
         label="Select composer",
         options=composers,
-        index=3,
+        index=1,
         key=f"select_composer_{key}",
     )
 
