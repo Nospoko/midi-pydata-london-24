@@ -143,6 +143,20 @@ python -m streamlit run --server.port 4017 modelling/extract_notes.py
 | SOPRANO  | 60-96     |
 | TREBLE   | 60-108    |
 
+## Important Links
+The Maestro dataset used in the experiments can be found here: <br>
+https://huggingface.co/datasets/roszcz/maestro-sustain-v2
+
+You can also check out our organization GitHub with tools and experiments: <br>
+https://github.com/your-organization-link
+
+For questions, reach out to Wojtek Matejuk at: <br>
+wmatejuk14@gmail.com
+
+Explore and play with MIDI and share your compositions on: <br>
+https://pianoroll.io
+
+If you play the piano and want to help source training data, track your practices there.
 
 ### Deployment
 
