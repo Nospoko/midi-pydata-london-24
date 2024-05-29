@@ -148,6 +148,11 @@ slides = [
         "piece_paths": ["data/midi/scored_piece.mid"],
     },
     {
+        "header": "Scores sheet 3",
+        "images": ["data/img/scores.png"],
+        "piece_paths": ["data/midi/scored_piece_human.mid"],
+    },
+    {
         "header": "Interpreting scores",
         "images": ["data/img/note_duration_comparison0.png"],
     },
@@ -156,27 +161,8 @@ slides = [
         "header": "Yuja Wang - Flight of a Bublebee",
         "video": "data/Yuja_Wang.mp4",
     },
-    # Spectrogram solo
     {
-        "header": "Spectrograms vs. MIDI 1",
-        "images": ["data/img/spectrogram.png"],
-    },
-    # Spectrograms vs. MIDI
-    {
-        "header": "Spectrograms vs MIDI 2",
-        "images": [
-            "data/img/spectrogram.png",
-            "data/img/pianoroll.png",
-        ],
-    },
-    # Yuja Wang in midi by Basic Pitch
-    {
-        "header": "Yuja Wang transcribed by Basic Pitch",
-        # "video": "data/Yuja_Wang.mp4",
-        "piece_paths": ["data/midi/yuja_wang.mid"],
-    },
-    {
-        "header": "MIDI output",
+        "header": "Piano performance as MIDI file",
         "images": ["data/img/midi_out.jpg"],
     },
     # MIDI to DataFrame Conversion
@@ -258,25 +244,17 @@ slides = [
         "content": """
         #### Overview
 
-       1. **Data Gathering** -> 2. **Data Augmentation** ->
-       3. **Tokenization** -> 4. **Pre-Training** -> 5. **Fine-Tuning**
+1. **Data Gathering** -> 2. **Tokenization** -> 3. **Training**
 
-        ## Steps Involved
+## Steps Involved
+1. **Data Gathering**
+- Examples: Web scraping, publicly available datasets, proprietary data.
 
-        1. **Data Gathering**
-        - Examples: Web scraping, publicly available datasets, proprietary data.
+2. **Tokenization**
+- Convert raw text into a sequence of tokens (subwords, words, or characters).
 
-        2. **Data Augmentation**
-        - Examples: Data synthesis, noise addition, back-translation.
-
-        3. **Tokenization**
-        - Convert raw text into a sequence of tokens (subwords, words, or characters).
-
-        4. **Pre-Training**
-        - Examples: next-token-prediction, masked language modelling.
-
-        5. **Fine-Tuning**
-        - Examples: Text classification, question answering, text generation.
+3. **Training**
+- Examples: next-token-prediction, masked language modelling.
         """,
     },
     {
@@ -284,32 +262,65 @@ slides = [
         "content": """
         #### Overview
 
-       1. **Data Gathering** -> 2. **Data Augmentation** ->
-       3. **Tokenization** -> 4. **Pre-Training** -> 5. **Fine-Tuning**
+1. **Data Gathering** -> 2. **Tokenization** -> 3. **Training**
 
-        ## Steps Involved
+## Steps Involved
 
-        1. **Data Gathering**
-        - Examples: Crowd-sourcing, buying recordings.
+1. **Data Gathering**
+- Examples: Crowd-sourcing, buying recordings.
 
-        2. **Data Augmentation**
-        - Examples: Pitch-shifting, speed change.
+2. **Tokenization**
+- Convert MIDI data into a sequence of tokens (many methods to use!).
 
-        3. **Tokenization**
-        - Convert MIDI data into a sequence of tokens (many methods to use!).
+3. **Pre-Training**
+- Examples: next-token-prediction, masked music modelling.
 
-        4. **Pre-Training**
-        - Examples: next-token-prediction, masked music modelling.
 
-        5. **Fine-Tuning**
-        - Examples: sub-sequence prediciton
+        """,
+    },
+    {
+        "header": "Initial experiments",
+        "images": ["data/img/graphics2.jpg"],
+    },
+    {
+        "header": "Initial experiments",
+        "content": """
+        #### Initial Plan
+        - LLM for Seq-to-Seq
+        """,
+    },
+    {
+        "header": "Initial experiments",
+        "content": """
+        #### Initial Plan
+        - LLM for Seq-to-Seq
+
+        #### Experiments
+        - Diffusion Models
+        - VQ-VAE
+        - LLM for Note Pitches
+        """,
+    },
+    {
+        "header": "Initial experiments",
+        "content": """
+        #### Initial Plan
+        - LLM for Seq-to-Seq
+
+        #### Experiments
+        - Diffusion Models
+        - VQ-VAE
+        - LLM for Note Pitches
+
+        #### Final Experiment
+        - GPT for Seq-to-Seq
         """,
     },
     {
         "header": "Modelling piano performances with Large Language Models",
         "images": ["data/img/piano.jpg"],
     },
-    {"header": "Dataset sizes comparison", "images": ["data/img/dataset_sizes.png"]},
+    {"header": "Dataset sizes comparison", "images": ["data/img/training_dataset_sizes.png"]},
     # Augmentation
     {
         "header": "Augmentation 1",
@@ -364,19 +375,6 @@ slides = [
     },
     # Quantization
     {
-        "header": "One token per note",
-        "content": """
-        ```py
-        ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
-        ```
-        """,
-    },
-    {
-        "header": "Dstart and duration",
-        "images": ["data/img/dstart_and_duration.png"],
-    },
-    # Quantization
-    {
         "header": "Quantization 1",
         "content": """
     ```py
@@ -387,52 +385,6 @@ slides = [
     ```
     """,
         "dataframe": pd.read_csv("data/quantization.csv", index_col=0),
-    },
-    {
-        "header": "Quantization 2",
-        "content": """
-        ```py
-        ["74-1-4-4", "71-0-4-4" "83-0-4-4" "79-0-4-4" "77-3-4-4"]
-        ```
-        """,
-    },
-    {
-        "header": "Initial experiments",
-        "images": ["data/img/graphics2.jpg"],
-    },
-    {
-        "header": "Initial experiments",
-        "content": """
-        #### Initial Plan
-        - LLM for Seq-to-Seq
-        """,
-    },
-    {
-        "header": "Initial experiments",
-        "content": """
-        #### Initial Plan
-        - LLM for Seq-to-Seq
-
-        #### Experiments
-        - Diffusion Models
-        - VQ-VAE
-        - LLM for Note Pitches
-        """,
-    },
-    {
-        "header": "Initial experiments",
-        "content": """
-        #### Initial Plan
-        - LLM for Seq-to-Seq
-
-        #### Experiments
-        - Diffusion Models
-        - VQ-VAE
-        - LLM for Note Pitches
-
-        #### Final Experiment
-        - GPT for Seq-to-Seq
-        """,
     },
     # ExponentialTimeTokenizer
     {
@@ -809,54 +761,55 @@ slides = [
 
 def main():
     # Navigation buttons
-    col1, col2, col3 = st.columns([1, 2, 1])
+    col1, col2, col3 = st.columns([1, 5, 1])
     if col1.button("Previous"):
         if st.session_state.slide > 0:
             st.session_state.slide -= 1
     if col3.button("Next"):
         if st.session_state.slide < len(slides) - 1:
             st.session_state.slide += 1
+    pres_columns = st.columns([1, 5, 1])
+    with pres_columns[1]:
+        # Display the current slide
+        slide = slides[st.session_state.slide]
 
-    # Display the current slide
-    slide = slides[st.session_state.slide]
+        if "header" in slide:
+            st.header(slide["header"])
+            # Make Visualisation slide responsive
+            if slide["header"] == "Visualising and Listening to MIDI Files":
+                st.code(slide["code"], language="python")
+                idx = st.number_input(label="record id", value=77)
+                record = dataset[idx]
+                piece = ff.MidiPiece.from_huggingface(record=record)
+                st.json(piece.source, expanded=False)
+                streamlit_pianoroll.from_fortepyan(piece=piece)
+                return
+            if slide["header"] == "Benchmark task example":
+                benchmark_review()
 
-    if "header" in slide:
-        st.header(slide["header"])
-        # Make Visualisation slide responsive
-        if slide["header"] == "Visualising and Listening to MIDI Files":
+        if "code" in slide:
             st.code(slide["code"], language="python")
-            idx = st.number_input(label="record id", value=77)
-            record = dataset[idx]
-            piece = ff.MidiPiece.from_huggingface(record=record)
-            st.json(piece.source, expanded=False)
-            streamlit_pianoroll.from_fortepyan(piece=piece)
-            return
-        if slide["header"] == "Benchmark task example":
-            benchmark_review()
-
-    if "code" in slide:
-        st.code(slide["code"], language="python")
-    if "content" in slide:
-        st.write(
-            slide["content"],
-            unsafe_allow_html=True,
-        )
-    if "dataframe" in slide:
-        st.write(slide["dataframe"])
-    if "images" in slide:
-        for image in slide["images"]:
-            st.image(image=image)
-    if "video" in slide:
-        st.video(slide["video"])
-    if "pieces" in slide:
-        for piece in slide["pieces"]:
-            streamlit_pianoroll.from_fortepyan(piece=piece)
-    if "piece_paths" in slide:
-        for piece_path in slide["piece_paths"]:
-            prepared_piece = ff.MidiPiece.from_file(piece_path)
-            streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
-    if "dual_piece" in slide:
-        streamlit_pianoroll.from_fortepyan(piece=original_piece, secondary_piece=generated_piece)
+        if "content" in slide:
+            st.write(
+                slide["content"],
+                unsafe_allow_html=True,
+            )
+        if "dataframe" in slide:
+            st.write(slide["dataframe"])
+        if "images" in slide:
+            for image in slide["images"]:
+                st.image(image=image)
+        if "video" in slide:
+            st.video(slide["video"])
+        if "pieces" in slide:
+            for piece in slide["pieces"]:
+                streamlit_pianoroll.from_fortepyan(piece=piece)
+        if "piece_paths" in slide:
+            for piece_path in slide["piece_paths"]:
+                prepared_piece = ff.MidiPiece.from_file(piece_path)
+                streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+        if "dual_piece" in slide:
+            streamlit_pianoroll.from_fortepyan(piece=original_piece, secondary_piece=generated_piece)
 
 
 if __name__ == "__main__":
