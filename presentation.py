@@ -662,12 +662,14 @@ slides = [
     {
         "header": "Training a GPT",
         "content": """
-    | Dataset                            | Train tokens | Test tokens | Validation tokens |
-|------------------------------------|--------------|-------------|-------------------|
-| Basic (maestro only) ExponentialTimeTokenDataset |    7,071,232 |     645,120 |         788,480   |
-| Giant ExponentialTimeTokenDataset |   72,385,536 |     645,120 |         788,480   |
-| Basic (maestro only) AwesomeTokensDataset     |    2,614,272 |     241,152 |         288,256   |
-| Giant AwesomeTokensDataset     |   27,245,056 |     241,152 |         288,256   |
+| Dataset                                   | Train tokens | Test tokens | Validation tokens |
+|-------------------------------------------|--------------|-------------|-------------------|
+| Basic (maestro only) ExponentialTimeTokenDataset | 7,071,232    | 645,120     | 788,480           |
+| Giant ExponentialTimeTokenDataset         | 72,385,536   | 645,120     | 788,480           |
+| Colossal ExponentialTimeTokenDataset      | 210,522,112  | 645,120     | 788,480           |
+| Basic (maestro only) AwesomeTokensDataset    | 2,614,272    | 241,152     | 288,256           |
+| Giant AwesomeTokensDataset                   | 27,245,056   | 241,152     | 288,256           |
+| Colossal AwesomeTokensDataset                | 77,072,896   | 242,176     | 288,768           |
     """,
     },
     # Model generated piece example
