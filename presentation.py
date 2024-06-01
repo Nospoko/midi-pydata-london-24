@@ -136,6 +136,35 @@ slides = [
         "header": "Why Piano?",
         "images": ["data/img/graphics3.jpg"],
     },
+    # piano performance
+    {
+        "header": "Yuja Wang - Flight of a Bublebee",
+        "video": "data/Yuja_Wang.mp4",
+    },
+    {
+        "header": "Piano performance as MIDI file",
+        "images": ["data/img/midi_out.jpg"],
+    },
+    {"header": "Spectrogram vs MIDI 1", "images": ["data/img/spectrogram.png"]},
+    {
+        "header": "Spectrogram vs MIDI 2",
+        "images": ["data/img/spectrogram.png", "data/img/pianoroll.png"],
+    },
+    {
+        "header": "Yuja Wang transcribed",
+        "piece_paths": ["data/midi/yuja_wang.mid"],
+    },
+    # MIDI to DataFrame Conversion
+    {
+        "header": "Converting MIDI to DataFrame",
+        "code": """
+        import fortepyan as ff
+
+        piece = ff.MidiPiece.from_file(path="data/midi/piano.mid")
+        print(piece.df)
+        """,
+        "dataframe": piece.df[note_columns],
+    },
     # Scores
     {
         "header": "Scores sheet 1",
@@ -156,53 +185,24 @@ slides = [
         "header": "Interpreting scores",
         "images": ["data/img/note_duration_comparison0.png"],
     },
-    # piano performance
     {
-        "header": "Yuja Wang - Flight of a Bublebee",
-        "video": "data/Yuja_Wang.mp4",
-    },
-    {
-        "header": "Piano performance as MIDI file",
-        "images": ["data/img/midi_out.jpg"],
-    },
-    # MIDI to DataFrame Conversion
-    {
-        "header": "Converting MIDI to DataFrame",
-        "code": """
-        import fortepyan as ff
-
-        piece = ff.MidiPiece.from_file(path="data/midi/piano.mid")
-        print(piece.df)
-        """,
-        "dataframe": piece.df[note_columns],
-    },
-    # MIDI datasets
-    {
-        "header": "roszcz/maestro-sustain-v2",
-        "dataframe": maestro_description,
+        "header": "Maestro",
         "content": """
-        ```
-        DatasetDict({
-            train: Dataset({
-                features: ['notes', 'source'],
-                num_rows: 962
-            })
-            validation: Dataset({
-                features: ['notes', 'source'],
-                num_rows: 137
-            })
-            test: Dataset({
-                features: ['notes', 'source'],
-                num_rows: 177
-            })
-        })
-        ```
-        """,
-        "code": """
-        from datasets import load_dataset
+- https://magenta.tensorflow.org/datasets/maestro
 
-        dataset = load_dataset("roszcz/maestro-sustain-v2")
-        """,
+- High quality dataset with classical piano music.
+
+- Backbone of our datasets.
+
+
+| Split       | Performances | Duration (hours) | Size (GB) | Notes (millions) |
+|-------------|--------------|------------------|-----------|------------------|
+| Train       | 962          | 159.2            | 96.3      | 5.66             |
+| Validation  | 137          | 19.4             | 11.8      | 0.64             |
+| Test        | 177          | 20.0             | 12.1      | 0.74             |
+| **Total**   | 1276         | 198.7            | 120.2     | 7.04             |
+
+    """,
     },
     # Visualizing and Listening to MIDI Files
     {
@@ -267,13 +267,14 @@ slides = [
 ## Steps Involved
 
 1. **Data Gathering**
-- Examples: Crowd-sourcing, buying recordings.
+- Examples: ~~Web scraping, publicly available datasets, proprietary data~~
+**Crowd-sourcing, buying recordings, publicly available data**.
 
 2. **Tokenization**
-- Convert MIDI data into a sequence of tokens (many methods to use!).
+- Convert ~~raw text~~ **MIDI data** into a sequence of tokens (many methods to use!).
 
-3. **Pre-Training**
-- Examples: next-token-prediction, masked music modelling.
+3. **Training**
+- Examples: next-token-prediction, masked ~~language~~ **music** modelling.
 
 
         """,
