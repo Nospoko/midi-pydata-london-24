@@ -72,6 +72,15 @@ exponential_time_tokens = {
     "7T": "640ms",
 }
 
+quantized_df_columns = [
+    "pitch",
+    "velocity",
+    "velocity_quantized",
+    "start",
+    "start_quantized",
+    "end",
+    "end_quantized",
+]
 
 # Initialize session state
 if "slide" not in st.session_state:
@@ -85,23 +94,6 @@ slides = [
     # Opening slide
     {
         "images": ["data/img/cover.png"],
-    },
-    # links
-    {
-        "header": "Important links",
-        "content": """
-    Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
-
-    Github: https://github.com/Nospoko
-
-    My Github: https://github.com/WojciechMat
-
-    Presentation repo: https://github.com/Nospoko/midi-pydata-london-24
-
-    Pianoroll: https://pianoroll.io/
-
-    Email: wmatejuk14@gmail.com
-    """,
     },
     # Pythagoreans
     {
@@ -127,10 +119,22 @@ slides = [
         "header": "Piano",
         "images": ["data/img/graphics3.jpg"],
     },
+    {
+        "header": "Key-press schema",
+        "images": ["data/img/piano_diagram.png"],
+    },
     # pedals
     {
-        "header": "Pedals",
+        "header": "Disclaimer: pedals!",
         "images": ["data/img/pedals.jpg"],
+    },
+    {
+        "header": "MIDI - Musical Instrument Digital Interface",
+        "images": ["data/img/midi_out.jpg"],
+    },
+    {
+        "header": "MIDI - Musical Instrument Digital Interface",
+        "images": ["data/img/key_press.png"],
     },
     # piano performance
     {
@@ -139,42 +143,12 @@ slides = [
     },
     {
         "header": "MIDI - Musical Instrument Digital Interface",
-        "images": ["data/img/midi_out.jpg"],
-    },
-    {
-        "header": "MIDI - Musical Instrument Digital Interface",
-        "images": ["data/img/key_press.jpg"],
-        "piece_paths": ["data/midi/key_press.mid"],
-    },
-    {
-        "header": "MIDI - Musical Instrument Digital Interface",
-        "content": """
-1. **Exact Key-Press Information**
-    - MIDI captures precise details of each key press, including velocity.
-    - Events are processed exactly when the pianist presses and releases keys.
-
-2. **Smaller Data Format**
-    - MIDI files are significantly smaller than high-quality audio files.
-    - Efficient for storage and model training.
-
-3. **Focused on Artist-Instrument Interaction**
-    - Mechanical aspects of the performance.
-    - Relationship between the artist and the piano.
-
-4. **High-Quality Audio Challenges**
-    - Higher sampling rates for audio increase data size.
-    - More storage and computational resources needed for training.
-
-            """,
+        "images": ["data/img/pianoroll_example.png"],
     },
     {"header": "Spectrogram vs MIDI 1", "images": ["data/img/spectrogram.png"]},
     {
         "header": "Spectrogram vs MIDI 2",
         "images": ["data/img/pianoroll.png"],
-    },
-    {
-        "header": "Yuja Wang transcribed",
-        "piece_paths": ["data/midi/yuja_wang.mid"],
     },
     # MIDI to DataFrame Conversion
     {
@@ -194,18 +168,12 @@ slides = [
     },
     # Scored piece
     {
-        "header": "Scores sheet 2",
-        "images": ["data/img/scores.png"],
-        "piece_paths": ["data/midi/scored_piece.mid"],
-    },
-    {
-        "header": "Scores sheet 3",
-        "images": ["data/img/scores.png"],
-        "piece_paths": ["data/midi/scored_piece_human.mid"],
+        "header": "Mechanical vs human",
+        "piece_paths": ["data/midi/scored_piece.mid", "data/midi/scored_piece_human.mid"],
     },
     {
         "header": "Interpreting scores",
-        "images": ["data/img/note_duration_comparison0.png"],
+        "images": ["data/img/note_duration_comparison0.png", "data/img/dstart_comparison.png"],
     },
     {
         "header": "Maestro",
@@ -248,12 +216,6 @@ slides = [
         "header": "Duration distribution",
         "images": ["data/img/duration_comparison.png"],
     },
-    # dstart
-    {
-        "header": "Dstart distribution",
-        "code": 'piece.df["dstart"] = piece.df.start.diff().shift(-1)',
-        "images": ["data/img/dstart_comparison.png"],
-    },
     # pitch
     {
         "header": "Pitch distribution",
@@ -261,24 +223,6 @@ slides = [
     },
     {"header": "Formal vs informal vocabulary", "images": ["data/img/text_keys.png"]},
     # Modelling
-    {
-        "header": "LLM training pipeline",
-        "content": """
-        #### Overview
-
-1. **Data Gathering** -> 2. **Tokenization** -> 3. **Training**
-
-## Steps Involved
-1. **Data Gathering**
-- Examples: Web scraping, publicly available datasets, proprietary data.
-
-2. **Tokenization**
-- Convert raw text into a sequence of tokens (subwords, words, or characters).
-
-3. **Training**
-- Examples: next-token-prediction, masked language modelling.
-        """,
-    },
     {
         "header": "MIDI LLM training pipeline",
         "content": """
@@ -289,14 +233,14 @@ slides = [
 ## Steps Involved
 
 1. **Data Gathering**
-- Examples: ~~Web scraping, publicly available datasets, proprietary data~~
-**Crowd-sourcing, buying recordings, publicly available data**.
+- Examples: Web scraping, publicly available datasets, proprietary data
+
 
 2. **Tokenization**
-- Convert ~~raw text~~ **MIDI data** into a sequence of tokens (many methods to use!).
+- Convert raw data into a sequence of tokens (many methods to use!).
 
 3. **Training**
-- Examples: next-token-prediction, masked ~~language~~ **music** modelling.
+- Examples: next-token-prediction, masked sequence modelling.
 
 
         """,
@@ -323,20 +267,12 @@ slides = [
         - VQ-VAE
         - LLM for Note Pitches
         """,
+        "video": "data/chopin-a-minor.mp4",
     },
     {
-        "header": "Initial experiments",
+        "header": "Don't be a hero",
         "content": """
-        #### Initial Plan
-        - LLM for Seq-to-Seq
-
-        #### Experiments
-        - Diffusion Models
-        - VQ-VAE
-        - LLM for Note Pitches
-
-        #### Final Experiment
-        - GPT for Seq-to-Seq
+        ~Andrej Karpathy
         """,
     },
     {
@@ -396,6 +332,10 @@ slides = [
             """,
         "piece_paths": ["data/midi/d_minor_bach.mid", "data/midi/d_minor_bach_speeded.mid"],
     },
+    {
+        "header": "Tokenization in NLP",
+        "images": ["data/img/tokenization_nlp.png"],
+    },
     # Quantization
     {
         "header": "Quantization 1",
@@ -407,7 +347,7 @@ slides = [
         return quantized
     ```
     """,
-        "dataframe": pd.read_csv("data/quantization.csv", index_col=0),
+        "dataframe": pd.read_csv("data/quantization.csv", index_col=0)[quantized_df_columns],
     },
     # ExponentialTimeTokenizer
     {
@@ -445,7 +385,7 @@ slides = [
             """,
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:1],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -460,9 +400,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization12.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:2],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -477,9 +418,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization12.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:3],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -494,9 +436,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization3.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:5],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -511,9 +454,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization45.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:5],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -528,9 +472,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization45.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:7],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -545,9 +490,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization6.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:8],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -562,9 +508,10 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization7.png"],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Tokenization process",
         "code": tokens[:10],
         "content": """
             | pitch | velocity |      time | event_type |
@@ -579,16 +526,12 @@ slides = [
             |    47 |       79 |  0.275000 |   note_off |
 
             """,
+        "images": ["data/img/tokenization8.png"],
     },
     {
         "piece_paths": ["data/midi/example.mid"],
         "pieces": [untokenized_piece],
         "code": tokens[:20],
-    },
-    # BPE
-    {
-        "header": "Tokenization in NLP",
-        "images": ["data/img/tokenization_nlp.png"],
     },
     {
         "header": "BPE on MIDI data",
@@ -666,34 +609,38 @@ slides = [
 
         #### &#8595;
 
-        | Index | Token     |
-        |-------|-----------|
-        | 0     | ĹķĶğ      |
-        | 1     | Åĝ»ķ      |
-        | 2     | Ĺğ        |
-        | 3     | §         |
-        | 4     | ĹĶĝ       |
-        | 5     | ĶĢ×       |
-        | 6     | ĸķĶğ      |
-        | 7     | ġ     |
-        | 8     | ĸķğ       |
-        | 9     | ¨ġ§       |
+
+        | Index | Token  | ExponentialTimeTokenizer Tokens                      |
+        |-------|--------|------------------------------------------------------|
+        | 0     | Ìķġ    | ["NOTE_OFF_72", "3T", "VELOCITY_12"]                 |
+        | 1     | ÔķĶģ   | ["NOTE_OFF_76", "3T", "2T", "VELOCITY_14"]           |
+        | 2     | ÆķĦ    | ["NOTE_OFF_69", "3T", "VELOCITY_17"]                 |
+        | 3     | ÚĪ     | ["NOTE_OFF_79", "VELOCITY_21"]                       |
+        | 4     | ğ     | ["NOTE_OFF_35", "VELOCITY_10"]                       |
+        | 5     | ¹ĸĶĥ  | ["NOTE_ON_63", "4T", "2T", "VELOCITY_16"]             |
+        | 6     | ôğ     | ["NOTE_OFF_92", "VELOCITY_10"]                       |
+        | 7     | ªķħ    | ["NOTE_OFF_55", "3T", "VELOCITY_18"]                 |
+        | 8     | ÒķĶġ   | ["NOTE_OFF_75", "3T", "2T", "VELOCITY_12"]           |
+        | 9     | ¡ĸĶĦ  | ["NOTE_ON_51", "4T", "2T", "VELOCITY_17"]             |
+        | 10    | ĸ    | ["NOTE_ON_50", "4T"]                                  |
+        | 11   | ĸĶĢ  | ["NOTE_ON_43", "4T", "2T", "VELOCITY_13"]             |
 
         """,
     },
     # Training a GPT
     {
         "header": "Training a GPT",
-        "content": """
-| Dataset                                   | Train tokens | Test tokens | Validation tokens |
-|-------------------------------------------|--------------|-------------|-------------------|
-| Basic (maestro only) ExponentialTimeTokenDataset | 7,071,232    | 645,120     | 788,480           |
-| Giant ExponentialTimeTokenDataset         | 72,385,536   | 645,120     | 788,480           |
-| Colossal ExponentialTimeTokenDataset      | 210,522,112  | 645,120     | 788,480           |
-| Basic (maestro only) AwesomeTokensDataset    | 2,614,272    | 241,152     | 288,256           |
-| Giant AwesomeTokensDataset                   | 27,245,056   | 241,152     | 288,256           |
-| Colossal AwesomeTokensDataset                | 77,072,896   | 242,176     | 288,768           |
-    """,
+        #         "content": """
+        # | Dataset                                   | Train tokens | Test tokens | Validation tokens |
+        # |-------------------------------------------|--------------|-------------|-------------------|
+        # | Basic (maestro only) ExponentialTimeTokenDataset | 7,071,232    | 645,120     | 788,480           |
+        # | Giant ExponentialTimeTokenDataset         | 72,385,536   | 645,120     | 788,480           |
+        # | Colossal ExponentialTimeTokenDataset      | 210,522,112  | 645,120     | 788,480           |
+        # | Basic (maestro only) AwesomeTokensDataset    | 2,614,272    | 241,152     | 288,256           |
+        # | Giant AwesomeTokensDataset                   | 27,245,056   | 241,152     | 288,256           |
+        # | Colossal AwesomeTokensDataset                | 77,072,896   | 242,176     | 288,768           |
+        #     """,
+        "images": ["data/img/wandb.png"],
     },
     # Model generated piece example
     {
@@ -765,8 +712,13 @@ slides = [
 
             """,
     },
+    {
+        "header": "Thank you very much!",
+        "images": ["data/img/graphics4.jpg"],
+    },
     # links
     {
+        "header": "Thank you very much!",
         "content": """
     Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
 
@@ -779,7 +731,7 @@ slides = [
     Pianoroll: https://pianoroll.io/
 
     Email: wmatejuk14@gmail.com
-    """
+    """,
     },
 ]
 
@@ -800,6 +752,7 @@ def main():
 
         if "header" in slide:
             st.header(slide["header"])
+
             # Make Visualisation slide responsive
             if slide["header"] == "Visualising and Listening to MIDI Files":
                 st.code(slide["code"], language="python")
@@ -809,8 +762,30 @@ def main():
                 st.json(piece.source, expanded=False)
                 streamlit_pianoroll.from_fortepyan(piece=piece)
                 return
+
             if slide["header"] == "Benchmark task example":
                 benchmark_review()
+
+            if slide["header"] == "Mechanical vs human":
+                # side by side comparison
+                display_columns = st.columns([1, 1])
+                with display_columns[0]:
+                    prepared_piece = ff.MidiPiece.from_file(slide["piece_paths"][0])
+                    streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+                with display_columns[1]:
+                    prepared_piece = ff.MidiPiece.from_file(slide["piece_paths"][1])
+                    streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+                return
+
+            # custom tokenization slides
+            if slide["header"] == "Tokenization process":
+                st.code(slide["code"], language="python")
+                display_columns = st.columns([1, 1, 3])
+                with display_columns[0]:
+                    st.write(slide["content"], unsafe_allow_html=True)
+                with display_columns[2]:
+                    st.image(slide["images"][0])
+                return
 
         if "code" in slide:
             st.code(slide["code"], language="python")

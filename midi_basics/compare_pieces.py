@@ -1,6 +1,7 @@
 import numpy as np
 import fortepyan as ff
 import streamlit as st
+import streamlit_pianoroll
 import matplotlib.pyplot as plt
 
 from browse_dataset import select_record, select_dataset
@@ -90,19 +91,19 @@ def main() -> None:
     )
     st.pyplot(fig)
     # Calculate dstart for both pieces
-    first_piece.df["dstart"] = first_piece.df.start.diff().shift(-1)
-    second_piece.df["dstart"] = second_piece.df.start.diff().shift(-1)
+    first_piece.df["dstart"] = first_piece.df.start.diff().shift(-1).fillna(0)
+    second_piece.df["dstart"] = second_piece.df.start.diff().shift(-1).fillna(0)
 
     # Plot dstart comparison
     bins = np.linspace(0, 1.00, num=200)
     fig, ax = plot_histogram(
-        data1=first_piece.df.dstart.dropna().values,
-        data2=second_piece.df.dstart.dropna().values,
+        data1=first_piece.df.dstart.fillna(0).values,
+        data2=second_piece.df.dstart.fillna(0).values,
         label1=label1,
         label2=label2,
         xlabel="Time Difference (s)",
         ylabel="Frequency",
-        title="Dstart Distribution",
+        title="Time Difference Distribution",
         bins=bins,
     )
     ax.set_xlim((0, 0.4))
@@ -140,6 +141,16 @@ def main() -> None:
     fig.subplots_adjust(bottom=0.3, wspace=0.33)
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2))
     st.pyplot(fig)
+    show_pianorolls = st.checkbox(
+        "show pianorolls",
+        value=False,
+    )
+
+    if not show_pianorolls:
+        return
+
+    streamlit_pianoroll.from_fortepyan(first_piece)
+    streamlit_pianoroll.from_fortepyan(second_piece)
 
 
 if __name__ == "__main__":
