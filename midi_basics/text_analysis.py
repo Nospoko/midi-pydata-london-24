@@ -12,10 +12,15 @@ nltk.download("gutenberg")
 nltk.download("averaged_perceptron_tagger")
 
 
-def plot_word_frequencies(
-    words: list[str], freq1: np.ndarray, freq2: np.ndarray, label1: str, label2: str, title: str
+def plot_word_counts(
+    words: list[str],
+    count1: np.ndarray,
+    count2: np.ndarray,
+    label1: str,
+    label2: str,
+    title: str,
 ) -> tuple[plt.Figure, plt.Axes]:
-    """Utility function to plot word frequencies for comparison."""
+    """Utility function to plot word counts for comparison."""
     width_px = 1920
     height_px = 1080
 
@@ -31,20 +36,20 @@ def plot_word_frequencies(
 
     ax.bar(
         x,
-        freq1,
+        count1,
         label=label1,
         color="turquoise",
     )
     ax.bar(
         x,
-        freq2,
+        count2,
         label=label2,
         color="orange",
         alpha=0.6,
     )
 
     ax.set_xlabel("Verbs", fontsize=14)
-    ax.set_ylabel("Frequency", fontsize=14)
+    ax.set_ylabel("Count", fontsize=14)
     ax.set_title(title, fontsize=16)
     ax.set_xticks(x)
     ax.set_xticklabels(words, rotation=90)
@@ -60,7 +65,7 @@ def get_verbs(words):
     """Filter verbs from a list of words using POS tagging."""
 
     def is_verb(pos):
-        pos.startswith("VB")
+        return pos.startswith("VB")
 
     tagged_words = nltk.pos_tag(words)
     verbs = [word for word, pos in tagged_words if is_verb(pos) and len(word) > 1]
@@ -86,26 +91,23 @@ def analyze_text_corpus(corpus1, corpus2, top_n=50, num_samples=10000):
 
     counter1 = Counter(verbs1)
     counter2 = Counter(verbs2)
-
     common_verbs = set(counter1.keys()).intersection(set(counter2.keys()))
 
     common_counts1 = {verb: counter1[verb] for verb in common_verbs}
     common_counts2 = {verb: counter2[verb] for verb in common_verbs}
-
     # Get top N common verbs
     top_common_verbs = sorted(
         common_counts1.keys(),
         key=lambda x: common_counts1[x] + common_counts2[x],
         reverse=True,
     )[:top_n]
+    count1 = [common_counts1[verb] for verb in top_common_verbs]
+    count2 = [common_counts2[verb] for verb in top_common_verbs]
 
-    freq1 = [common_counts1[verb] for verb in top_common_verbs]
-    freq2 = [common_counts2[verb] for verb in top_common_verbs]
-
-    return freq1, freq2, top_common_verbs
+    return count1, count2, top_common_verbs
 
 
-def main() -> None:
+def main():
     # Analyze Text Data
     text_corpus1 = reuters
     text_corpus2_files = [
@@ -132,13 +134,13 @@ def main() -> None:
     )
 
     # Plot verb distribution comparison
-    fig, ax = plot_word_frequencies(
+    fig, ax = plot_word_counts(
         words=common_verbs,
-        freq1=text_data1,
-        freq2=text_data2,
-        label1="Reuters Corpus (Formal)",
-        label2="Gutenberg Narrative Texts (Informal)",
-        title="Top 50 Common Verb Frequencies in Formal and Informal Texts",
+        count1=text_data1,
+        count2=text_data2,
+        label1="News stories (Formal)",
+        label2="Narrative Texts (Informal)",
+        title="Top 50 Common Verb Count in Formal and Informal Texts",
     )
     st.pyplot(fig)
 

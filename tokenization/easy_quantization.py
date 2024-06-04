@@ -15,29 +15,22 @@ def main():
     # Load the MIDI file
     piece = ff.MidiPiece.from_file("data/midi/d_minor_bach.mid")
 
-    # Calculate dstart
-    next_start = piece.df.start.shift(-1)
-    piece.df["dstart"] = (next_start - piece.df.start).fillna(0)
-
     # Define the granularity (step size) for each series
-    dstart_step = 0.05
-    duration_step = 0.05
+    time_step = 0.05
     velocity_step = 5
 
     # Apply quantization to dstart, duration, and velocity
     piece.df["velocity_quantized"] = quantize_series(piece.df.velocity, velocity_step)
-    piece.df["duration_quantized"] = quantize_series(piece.df.duration, duration_step)
-    piece.df["dstart_quantized"] = quantize_series(piece.df.dstart, dstart_step)
+    piece.df["start_quantized"] = quantize_series(piece.df.start, time_step)
+    piece.df["end_quantized"] = quantize_series(piece.df.end, time_step)
 
     # Print an example of the quantized DataFrame
     st.write(piece.df)
     quantized = piece.df.copy()
     quantized["velocity"] = quantized["velocity_quantized"]
-    quantized["duration"] = quantized["duration_quantized"]
-    quantized["dstart"] = quantized["dstart_quantized"]
-
-    quantized["start"] = quantized["dstart"].cumsum()
-    quantized["end"] = quantized["start"] + quantized["duration"]
+    quantized["start"] = quantized["start_quantized"]
+    quantized["end"] = quantized["end_quantized"]
+    quantized["duration"] = quantized["end"] - quantized["start"]
 
     streamlit_pianoroll.from_fortepyan(ff.MidiPiece(quantized))
 

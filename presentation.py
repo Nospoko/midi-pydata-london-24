@@ -132,23 +132,45 @@ slides = [
         "header": "Pedals",
         "images": ["data/img/pedals.jpg"],
     },
-    {
-        "header": "Why Piano?",
-        "images": ["data/img/graphics3.jpg"],
-    },
     # piano performance
     {
         "header": "Yuja Wang - Flight of a Bublebee",
         "video": "data/Yuja_Wang.mp4",
     },
     {
-        "header": "Piano performance as MIDI file",
+        "header": "MIDI - Musical Instrument Digital Interface",
         "images": ["data/img/midi_out.jpg"],
+    },
+    {
+        "header": "MIDI - Musical Instrument Digital Interface",
+        "images": ["data/img/key_press.jpg"],
+        "piece_paths": ["data/midi/key_press.mid"],
+    },
+    {
+        "header": "MIDI - Musical Instrument Digital Interface",
+        "content": """
+1. **Exact Key-Press Information**
+    - MIDI captures precise details of each key press, including velocity.
+    - Events are processed exactly when the pianist presses and releases keys.
+
+2. **Smaller Data Format**
+    - MIDI files are significantly smaller than high-quality audio files.
+    - Efficient for storage and model training.
+
+3. **Focused on Artist-Instrument Interaction**
+    - Mechanical aspects of the performance.
+    - Relationship between the artist and the piano.
+
+4. **High-Quality Audio Challenges**
+    - Higher sampling rates for audio increase data size.
+    - More storage and computational resources needed for training.
+
+            """,
     },
     {"header": "Spectrogram vs MIDI 1", "images": ["data/img/spectrogram.png"]},
     {
         "header": "Spectrogram vs MIDI 2",
-        "images": ["data/img/spectrogram.png", "data/img/pianoroll.png"],
+        "images": ["data/img/pianoroll.png"],
     },
     {
         "header": "Yuja Wang transcribed",
