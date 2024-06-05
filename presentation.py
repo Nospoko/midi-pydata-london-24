@@ -101,17 +101,17 @@ slides = [
         "images": ["data/img/pythagoras.png"],
     },
     {
-        "header": "Algorithmic music composition 1 ",
+        "header": "Algorithmic music composition",
         "images": {"data/img/mozart_table.png"},
     },
     # Hiller
     {
-        "header": "Algorithmic music composition 2",
+        "header": "Algorithmic music composition",
         "images": ["data/img/hiller.jpg"],
     },
     # Cage
     {
-        "header": "Algorithmic music composition 3",
+        "header": "Algorithmic music composition",
         "images": ["data/img/cage.jpg"],
     },
     # Piano
@@ -145,11 +145,8 @@ slides = [
         "header": "MIDI - Musical Instrument Digital Interface",
         "images": ["data/img/pianoroll_example.png"],
     },
-    {"header": "Spectrogram vs MIDI 1", "images": ["data/img/spectrogram.png"]},
-    {
-        "header": "Spectrogram vs MIDI 2",
-        "images": ["data/img/pianoroll.png"],
-    },
+    {"header": "Audio vs MIDI", "images": ["data/img/spectrogram.png"]},
+    {"header": "Audio vs MIDI", "images": ["data/img/pianoroll.png"], "piece_paths": ["data/midi/d_minor_bach.mid"]},
     # MIDI to DataFrame Conversion
     {
         "header": "Converting MIDI to DataFrame",
@@ -163,7 +160,7 @@ slides = [
     },
     # Scores
     {
-        "header": "Scores sheet 1",
+        "header": "Scores sheet",
         "images": ["data/img/scores.png"],
     },
     # Scored piece
@@ -282,7 +279,7 @@ slides = [
     {"header": "Dataset sizes comparison", "images": ["data/img/training_dataset_sizes.png"]},
     # Augmentation
     {
-        "header": "Augmentation 1",
+        "header": "Augmentation",
         "content": """
             #### Pitch shifting
             ```py
@@ -293,7 +290,7 @@ slides = [
             """,
     },
     {
-        "header": "Augmentation 2",
+        "header": "Augmentation",
         "content": """
             #### Pitch shifting
             ```py
@@ -305,7 +302,7 @@ slides = [
         "images": ["data/img/pitch_shifted.png"],
     },
     {
-        "header": "Augmentation 3",
+        "header": "Augmentation",
         "content": """
             #### Speed change
             ```py
@@ -317,7 +314,7 @@ slides = [
             """,
     },
     {
-        "header": "Augmentation 4",
+        "header": "Augmentation",
         "content": """
             #### Speed change
             ```py
@@ -654,12 +651,12 @@ slides = [
     },
     # Generated midi pitch
     {
-        "header": "Pitches of generated notes 1",
+        "header": "Pitches of generated notes",
         "images": ["data/img/generated_pitch_comparison.png"],
     },
     # generated midi pitch compare
     {
-        "header": "Pitches of generated notes 2",
+        "header": "Pitches of generated notes",
         "images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"],
     },
     # concatenated generations
