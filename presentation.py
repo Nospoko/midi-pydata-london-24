@@ -18,7 +18,7 @@ dataset = load_hf_dataset()
 
 
 @st.cache_data
-def prepare_piece(idx: int = 77):
+def prepare_piece(idx: int = 78):
     record = dataset[idx]
     piece = ff.MidiPiece.from_huggingface(record=record)
     return piece
@@ -668,6 +668,15 @@ slides = [
         "header": "Future plans",
         "images": ["data/img/piano.jpg"],
     },
+    {
+        "header": "Future plans",
+        "content": """
+            - Defining benchmark tasks
+            - Building a community
+            - Sharing knowledge
+            - Experimenting more!
+            """,
+    },
     {"header": "Benchmark task example"},
     {
         "header": "Open Problems in Modelling Piano Performances",
@@ -691,6 +700,10 @@ slides = [
     # Pianoroll
     {
         "images": ["data/img/pianoroll_webpage.png"],
+    },
+    # Pianoroll
+    {
+        "images": ["data/img/pianoroll_page.png"],
     },
     {
         "header": "Conclusions",
