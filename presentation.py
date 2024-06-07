@@ -106,12 +106,16 @@ slides = [
     },
     # Hiller
     {
-        "header": "Algorithmic music composition",
+        "header": "The Illiac Suite",
+        "content": """
+        - ILLIAC computer weight about 1.8 TONS
+        - had a total of 64 kb of memory
+        """,
         "images": ["data/img/hiller.jpg"],
     },
     # Cage
     {
-        "header": "Algorithmic music composition",
+        "header": "HPSCHD",
         "images": ["data/img/cage.jpg"],
     },
     # Piano
@@ -335,7 +339,7 @@ slides = [
     },
     # Quantization
     {
-        "header": "Quantization 1",
+        "header": "Normalisation - Quantization",
         "content": """
     ```py
     def quantize_series(series, step_size) -> np.ndarray:
@@ -348,181 +352,244 @@ slides = [
     },
     # ExponentialTimeTokenizer
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Pre-tokenization: Transcription",
         "code": tokens[:20],
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Pre-tokenization: Transcription",
         "code": tokens[:20],
         "content": exponential_time_tokens,
     },
     {
-        "header": "ExponentialTimeTokenizer",
+        "header": "Pre-tokenization: Transcription",
         "code": tokens[:20],
         "content": """
-            #### Original Data:
-            | pitch | velocity |   start   |     end    |
-            |-------|----------|-----------|------------|
-            |   59  |    94    |  0.000000 |  0.072727  |
-            |   48  |    77    |  0.077273 |  0.177273  |
-            |   60  |    95    |  0.102273 |  0.229545  |
-            |   47  |    79    |  0.159091 |  0.275000  |
-            #### Split to events:
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  0.000000 |    note_on |
-            |    59 |       94 |  0.072727 |   note_off |
-            |    48 |       77 |  0.077273 |    note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    94    |  0.000000 |  0.072727  |
+|   48  |    77    |  0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  0.000000 |    note_on |
+|    59 |       94 |  0.072727 |   note_off |
+|    48 |       77 |  0.077273 |    note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:1],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       <span style="color:red">94</span> |  0.000000 |    note_on |
-            |    59 |       94 |  0.072727 |   note_off |
-            |    48 |       77 |  0.077273 |    note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    <span style="color:red">94    |  0.000000 |  0.072727  |
+|   48  |    77    |  0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       <span style="color:red">94</span> |  0.000000 |    note_on |
+|    59 |       94 |  0.072727 |   note_off |
+|    48 |       77 |  0.077273 |    note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization12.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:2],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    <span style="color:red">59</span> |       94 |  0.000000 |    <span style="color:red">note_on |
-            |    59 |       94 |  0.072727 |   note_off |
-            |    48 |       77 |  0.077273 |    note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   <span style="color:red">59  |    94    |  <span style="color:red">0.000000 |  0.072727  |
+|   48  |    77    |  0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    <span style="color:red">59</span> |       94 |  0.000000 |    <span style="color:red">note_on |
+|    59 |       94 |  0.072727 |   note_off |
+|    48 |       77 |  0.077273 |    note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization12.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:3],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  <span style="color:red">0.000000 |    note_on |
-            |    59 |       94 |  <span style="color:red">0.072727</span> |   note_off |
-            |    48 |       77 |  0.077273 |    note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    94    |  <span style="color:red">0.000000 |  <span style="color:red">0.072727  |
+|   48  |    77    |  0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  <span style="color:red">0.000000 |    note_on |
+|    59 |       94 |  <span style="color:red">0.072727</span> |   note_off |
+|    48 |       77 |  0.077273 |    note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization3.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:5],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  0.000000 |    note_on |
-            | <span style="color:red">59 | <span style="color:red">94 |  0.072727 | <span style="color:red">note_off |
-            |    48 |       77 |  0.077273 |    note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+            #### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   <span style="color:red">59  |    <span style="color:red">94    |  0.000000 |  <span style="color:red">0.072727  |
+|   48  |    77    |  0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  0.000000 |    note_on |
+| <span style="color:red">59 | <span style="color:red">94 |  0.072727 | <span style="color:red">note_off |
+|    48 |       77 |  0.077273 |    note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization45.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:5],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  0.000000 |    note_on |
-            |    59 |       94 |  <span style="color:red">0.072727 |   note_off |
-            |    48 |       77 |  <span style="color:red">0.077273 |    note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    94    |  0.000000 |  <span style="color:red">0.072727  |
+|   48  |    77    |  <span style="color:red">0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  0.000000 |    note_on |
+|    59 |       94 |  <span style="color:red">0.072727 |   note_off |
+|    48 |       77 |  <span style="color:red">0.077273 |    note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization45.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:7],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  0.000000 |    note_on |
-            |    59 |       94 |  0.072727 |   note_off |
-            | <span style="color:red">48 | <span style="color:red">77 |  0.077273 | <span style="color:red">note_on |
-            |    60 |       95 |  0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    94    |  0.000000 |  0.072727  |
+|   <span style="color:red">48  |    <span style="color:red">77    |  <span style="color:red">0.077273 |  0.177273  |
+|   60  |    95    |  0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  0.000000 |    note_on |
+|    59 |       94 |  0.072727 |   note_off |
+| <span style="color:red">48 | <span style="color:red">77 |  0.077273 | <span style="color:red">note_on |
+|    60 |       95 |  0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization6.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:8],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  0.000000 |    note_on |
-            |    59 |       94 |  0.072727 |   note_off |
-            |    48 |       77 |  <span style="color:red">0.077273 |    note_on |
-            |    60 |       95 |  <span style="color:red">0.102273 |    note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    94    |  0.000000 |  0.072727  |
+|   48  |    77    |  <span style="color:red">0.077273 |  0.177273  |
+|   60  |    95    |  <span style="color:red">0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  0.000000 |    note_on |
+|    59 |       94 |  0.072727 |   note_off |
+|    48 |       77 |  <span style="color:red">0.077273 |    note_on |
+|    60 |       95 |  <span style="color:red">0.102273 |    note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
 
             """,
         "images": ["data/img/tokenization7.png"],
     },
     {
-        "header": "Tokenization process",
+        "header": "Transcription process",
         "code": tokens[:10],
         "content": """
-            | pitch | velocity |      time | event_type |
-            |-------|----------|-----------|------------|
-            |    59 |       94 |  0.000000 |    note_on |
-            |    59 |       94 |  0.072727 |   note_off |
-            |    48 |       77 |  0.077273 |    note_on |
-            | <span style="color:red">60 | <span style="color:red">95 |  0.102273 | <span style="color:red">note_on |
-            |    47 |       79 |  0.159091 |    note_on |
-            |    48 |       77 |  0.177273 |   note_off |
-            |    60 |       95 |  0.229545 |   note_off |
-            |    47 |       79 |  0.275000 |   note_off |
-
-            """,
+#### Original Data:
+| pitch | velocity |   start   |     end    |
+|-------|----------|-----------|------------|
+|   59  |    94    |  0.000000 |  0.072727  |
+|   48  |    77    |  0.077273 |  0.177273  |
+|   <span style="color:red">60  |    <span style="color:red">95    |  <span style="color:red">0.102273 |  0.229545  |
+|   47  |    79    |  0.159091 |  0.275000  |
+#### Events:
+| pitch | velocity |      time | event_type |
+|-------|----------|-----------|------------|
+|    59 |       94 |  0.000000 |    note_on |
+|    59 |       94 |  0.072727 |   note_off |
+|    48 |       77 |  0.077273 |    note_on |
+| <span style="color:red">60 | <span style="color:red">95 |  0.102273 | <span style="color:red">note_on |
+|    47 |       79 |  0.159091 |    note_on |
+|    48 |       77 |  0.177273 |   note_off |
+|    60 |       95 |  0.229545 |   note_off |
+|    47 |       79 |  0.275000 |   note_off |
+""",
         "images": ["data/img/tokenization8.png"],
     },
     {
@@ -531,96 +598,30 @@ slides = [
         "code": tokens[:20],
     },
     {
-        "header": "BPE on MIDI data",
-        "content": "#### Original MIDI data",
-        "dataframe": piece.df,
+        "header": "BPE tokenizer",
+        "images": ["data/img/hello_pydata.png"],
     },
     {
-        "header": "Tokenize the data",
-        "content": """
-        #### Original MIDI data
-
-        #### &#8595;
-
-        ```
-        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
-        ```
-        """,
+        "header": "BPE on MIDI",
+        "images": ["data/img/bpe.png"],
     },
     {
-        "header": "Convert to unicode characters",
+        "header": "Vocabulary example",
         "content": """
-        #### Original MIDI data
-
-        #### &#8595;
-
-        ```
-        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
-        ```
-
-        #### &#8595;
-
-        #### ["ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ"]
-
-        """,
-    },
-    {
-        "header": 'Split to "words"',
-        "content": """
-        #### Original MIDI data
-
-        #### &#8595;
-
-        ```
-        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
-        ```
-
-        #### &#8595;
-
-        #### ["ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ"]
-
-        #### &#8595;
-
-        #### ["ĻĺķğÅĝ»ķĚ¯", "ĻğÓķĶĢ×ĸġ", "ÝĸĤãĸķ"]
-
-        """,
-    },
-    {
-        "header": "Train huggingface BPE tokenizer",
-        "content": """
-        #### Original MIDI data
-
-        #### &#8595;
-
-        ```
-        7T 6T 2T VELOCITY_12 NOTE_ON_67 7T 5T VELOCITY_16 NOTE_ON_72 6T 3T VELOCITY_16 NOTE_ON_78 ...
-        ```
-
-        #### &#8595;
-
-        #### ["ĻĺķğÅĝ»ķĚ¯ĻğÓķĶĢ×ĸġÝĸĤãĸķ"]
-
-        #### &#8595;
-
-        #### ["ĻĺķğÅĝ»ķĚ¯", "ĻğÓķĶĢ×ĸġ", "ÝĸĤãĸķ"]
-
-        #### &#8595;
-
-
-        | Index | Token  | ExponentialTimeTokenizer Tokens                      |
-        |-------|--------|------------------------------------------------------|
-        | 0     | Ìķġ    | ["NOTE_OFF_72", "3T", "VELOCITY_12"]                 |
-        | 1     | ÔķĶģ   | ["NOTE_OFF_76", "3T", "2T", "VELOCITY_14"]           |
-        | 2     | ÆķĦ    | ["NOTE_OFF_69", "3T", "VELOCITY_17"]                 |
-        | 3     | ÚĪ     | ["NOTE_OFF_79", "VELOCITY_21"]                       |
-        | 4     | ğ     | ["NOTE_OFF_35", "VELOCITY_10"]                       |
-        | 5     | ¹ĸĶĥ  | ["NOTE_ON_63", "4T", "2T", "VELOCITY_16"]             |
-        | 6     | ôğ     | ["NOTE_OFF_92", "VELOCITY_10"]                       |
-        | 7     | ªķħ    | ["NOTE_OFF_55", "3T", "VELOCITY_18"]                 |
-        | 8     | ÒķĶġ   | ["NOTE_OFF_75", "3T", "2T", "VELOCITY_12"]           |
-        | 9     | ¡ĸĶĦ  | ["NOTE_ON_51", "4T", "2T", "VELOCITY_17"]             |
-        | 10    | ĸ    | ["NOTE_ON_50", "4T"]                                  |
-        | 11   | ĸĶĢ  | ["NOTE_ON_43", "4T", "2T", "VELOCITY_13"]             |
+        | Index | Merged Tokens                      |
+        |-------|------------------------------------------------------|
+        | 0     | ["NOTE_OFF_72", "3T", "VELOCITY_12"]                 |
+        | 1     | ["NOTE_OFF_76", "3T", "2T", "VELOCITY_14"]           |
+        | 2     | ["NOTE_OFF_69", "3T", "VELOCITY_17"]                 |
+        | 3     | ["NOTE_OFF_79", "VELOCITY_21"]                       |
+        | 4     | ["NOTE_OFF_35", "VELOCITY_10"]                       |
+        | 5     | ["NOTE_ON_63", "4T", "2T", "VELOCITY_16"]             |
+        | 6     | ["NOTE_OFF_92", "VELOCITY_10"]                       |
+        | 7     | ["NOTE_OFF_55", "3T", "VELOCITY_18"]                 |
+        | 8     | ["NOTE_OFF_75", "3T", "2T", "VELOCITY_12"]           |
+        | 9     | ["NOTE_ON_51", "4T", "2T", "VELOCITY_17"]             |
+        | 10    | ["NOTE_ON_50", "4T"]                                  |
+        | 11   | ["NOTE_ON_43", "4T", "2T", "VELOCITY_13"]             |
 
         """,
     },
@@ -788,7 +789,7 @@ def main():
                 return
 
             # custom tokenization slides
-            if slide["header"] == "Tokenization process":
+            if slide["header"] == "Transcription process":
                 st.code(slide["code"], language="python")
                 display_columns = st.columns([1, 1, 3])
                 with display_columns[0]:
