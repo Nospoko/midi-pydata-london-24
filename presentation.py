@@ -86,8 +86,26 @@ quantized_df_columns = [
 if "slide" not in st.session_state:
     st.session_state.slide = 0
 
-note_columns = ["pitch", "velocity", "start", "end", "duration"]
+note_columns = ["pitch", "velocity", "start", "end"]
 piece.df = piece.df[note_columns]
+two_notes = []
+two_notes.append(
+    {
+        "pitch": 43,
+        "start": 0.4,
+        "end": 2.5,
+        "velocity": 67,
+    }
+)
+two_notes.append(
+    {
+        "pitch": 48,
+        "start": 0.6,
+        "end": 2.8,
+        "velocity": 98,
+    }
+)
+two_notes = pd.DataFrame(two_notes)
 
 # Slide content
 slides = [
@@ -139,6 +157,7 @@ slides = [
     {
         "header": "MIDI - Musical Instrument Digital Interface",
         "images": ["data/img/key_press.png"],
+        "dataframe": two_notes,
     },
     # piano performance
     {
@@ -148,6 +167,7 @@ slides = [
     {
         "header": "MIDI - Musical Instrument Digital Interface",
         "images": ["data/img/pianoroll_example.png"],
+        "dataframe": piece.df,
     },
     {"header": "Audio vs MIDI", "images": ["data/img/spectrogram.png"]},
     {"header": "Audio vs MIDI", "images": ["data/img/pianoroll.png"], "piece_paths": ["data/midi/d_minor_bach.mid"]},
@@ -269,6 +289,7 @@ slides = [
         - LLM for Note Pitches
         """,
         "video": "data/chopin-a-minor.mp4",
+        "images": ["data/img/diffused_cat.png"],
     },
     {
         "header": "Don't be a hero",
@@ -608,20 +629,20 @@ slides = [
     {
         "header": "Vocabulary example",
         "content": """
-        | Index | Merged Tokens                      |
-        |-------|------------------------------------------------------|
-        | 0     | ["NOTE_OFF_72", "3T", "VELOCITY_12"]                 |
-        | 1     | ["NOTE_OFF_76", "3T", "2T", "VELOCITY_14"]           |
-        | 2     | ["NOTE_OFF_69", "3T", "VELOCITY_17"]                 |
-        | 3     | ["NOTE_OFF_79", "VELOCITY_21"]                       |
-        | 4     | ["NOTE_OFF_35", "VELOCITY_10"]                       |
-        | 5     | ["NOTE_ON_63", "4T", "2T", "VELOCITY_16"]             |
-        | 6     | ["NOTE_OFF_92", "VELOCITY_10"]                       |
-        | 7     | ["NOTE_OFF_55", "3T", "VELOCITY_18"]                 |
-        | 8     | ["NOTE_OFF_75", "3T", "2T", "VELOCITY_12"]           |
-        | 9     | ["NOTE_ON_51", "4T", "2T", "VELOCITY_17"]             |
-        | 10    | ["NOTE_ON_50", "4T"]                                  |
-        | 11   | ["NOTE_ON_43", "4T", "2T", "VELOCITY_13"]             |
+| Index | Merged Tokens                           | n_symbols |
+|-------|-----------------------------------------|-----------|
+| 0     | ["NOTE_OFF_72", "3T", "VELOCITY_12"]    | 3         |
+| 1     | ["NOTE_OFF_76", "3T", "2T", "VELOCITY_14"] | 4         |
+| 2     | ["NOTE_OFF_69", "3T", "VELOCITY_17"]    | 3         |
+| 3     | ["NOTE_OFF_79", "VELOCITY_21"]          | 2         |
+| 4     | ["NOTE_OFF_35", "VELOCITY_10"]          | 2         |
+| 5     | ["NOTE_ON_63", "4T", "2T", "VELOCITY_16"] | 4         |
+| 6     | ["NOTE_OFF_92", "VELOCITY_10"]          | 2         |
+| 7     | ["NOTE_OFF_55", "3T", "VELOCITY_18"]    | 3         |
+| 8     | ["NOTE_OFF_75", "3T", "2T", "VELOCITY_12"] | 4         |
+| 9     | ["NOTE_ON_51", "4T", "2T", "VELOCITY_17"] | 4         |
+| 10    | ["NOTE_ON_50", "4T"]                    | 2         |
+| 11    | ["NOTE_ON_43", "4T", "2T", "VELOCITY_13"] | 4         |
 
         """,
     },
@@ -805,11 +826,18 @@ def main():
                 slide["content"],
                 unsafe_allow_html=True,
             )
-        if "dataframe" in slide:
-            st.write(slide["dataframe"])
+        if "images" in slide and "dataframe" in slide:
+            display_columns = st.columns([2, 5])
+            with display_columns[0]:
+                st.dataframe(slide["dataframe"])
+            with display_columns[1]:
+                st.image(slide["images"][0])
+            return
         if "images" in slide:
             for image in slide["images"]:
                 st.image(image=image)
+        if "dataframe" in slide:
+            st.write(slide["dataframe"])
         if "video" in slide:
             st.video(slide["video"])
         if "pieces" in slide:
