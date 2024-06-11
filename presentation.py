@@ -145,11 +145,6 @@ slides = [
         "header": "Key-press schema",
         "images": ["data/img/piano_diagram.png"],
     },
-    # pedals
-    {
-        "header": "Disclaimer: pedals!",
-        "images": ["data/img/pedals.jpg"],
-    },
     {
         "header": "MIDI - Musical Instrument Digital Interface",
         "images": ["data/img/midi_out.jpg"],
@@ -158,6 +153,19 @@ slides = [
         "header": "MIDI - Musical Instrument Digital Interface",
         "images": ["data/img/key_press.png"],
         "dataframe": two_notes,
+    },
+    {
+        "header": "Tabular representation",
+        "content": """
+    ```sql
+    CREATE TABLE performance_data (
+        pitch INT,
+        velocity INT,
+        start FLOAT,
+        end FLOAT
+    );
+    ```
+    """,
     },
     # piano performance
     {
@@ -170,7 +178,16 @@ slides = [
         "dataframe": piece.df,
     },
     {"header": "Audio vs MIDI", "images": ["data/img/spectrogram.png"]},
-    {"header": "Audio vs MIDI", "images": ["data/img/pianoroll.png"], "piece_paths": ["data/midi/d_minor_bach.mid"]},
+    {"header": "Audio vs MIDI", "images": ["data/img/pianoroll.png"]},
+    # pedals
+    {
+        "header": "Disclaimer: pedals!",
+        "images": ["data/img/pedals.jpg"],
+    },
+    {
+        "header": "MIDI piece",
+        "piece_paths": ["data/midi/d_minor_bach.mid"],
+    },
     # MIDI to DataFrame Conversion
     {
         "header": "Converting MIDI to DataFrame",
@@ -283,19 +300,13 @@ slides = [
         #### Initial Plan
         - LLM for Seq-to-Seq
 
-        #### Experiments
+        #### Possible deep-learning tasks
         - Diffusion Models
         - VQ-VAE
         - LLM for Note Pitches
         """,
         "video": "data/chopin-a-minor.mp4",
-        "images": ["data/img/diffused_cat.png"],
-    },
-    {
-        "header": "Don't be a hero",
-        "content": """
-        ~Andrej Karpathy
-        """,
+        "images": ["data/img/diffused_cat.png", "data/img/diffused_velocity.png"],
     },
     {
         "header": "Modelling piano performances with Large Language Models",
@@ -303,17 +314,6 @@ slides = [
     },
     {"header": "Dataset sizes comparison", "images": ["data/img/training_dataset_sizes.png"]},
     # Augmentation
-    {
-        "header": "Augmentation",
-        "content": """
-            #### Pitch shifting
-            ```py
-            def pitch_shift(df: pd.DataFrame, shift: int = 1) -> pd.DataFrame:
-                df.pitch += shift
-                return df, shift
-            ```
-            """,
-    },
     {
         "header": "Augmentation",
         "content": """
@@ -336,18 +336,6 @@ slides = [
                 df.end /= factor
                 df.duration = df.end - df.start
                 return df
-            """,
-    },
-    {
-        "header": "Augmentation",
-        "content": """
-            #### Speed change
-            ```py
-            def change_speed(df: pd.DataFrame, factor: float = None) -> pd.DataFrame:
-                df.start /= factor
-                df.end /= factor
-                df.duration = df.end - df.start
-                return df
 
             piece = ff.MidiPiece.from_file("data/midi/d_minor_bach.mid")
             change_speed(df=piece.df, factor=1.05)
@@ -357,6 +345,10 @@ slides = [
     {
         "header": "Tokenization in NLP",
         "images": ["data/img/tokenization_nlp.png"],
+    },
+    {
+        "header": "BPE tokenizer",
+        "images": ["data/img/bpe_in_nlp.png"],
     },
     # Quantization
     {
@@ -804,9 +796,11 @@ def main():
                 with display_columns[0]:
                     prepared_piece = ff.MidiPiece.from_file(slide["piece_paths"][0])
                     streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+                    st.dataframe(prepared_piece.df)
                 with display_columns[1]:
                     prepared_piece = ff.MidiPiece.from_file(slide["piece_paths"][1])
                     streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+                    st.dataframe(prepared_piece.df)
                 return
 
             # custom tokenization slides
@@ -817,6 +811,17 @@ def main():
                     st.write(slide["content"], unsafe_allow_html=True)
                 with display_columns[2]:
                     st.image(slide["images"][0])
+                return
+
+            if slide["header"] == "MIDI piece":
+                piece_path = slide["piece_paths"][0]
+                prepared_piece = ff.MidiPiece.from_file(piece_path)
+                display_columns = st.columns([2, 5])
+                with display_columns[0]:
+                    st.dataframe(prepared_piece.df)
+                with display_columns[1]:
+                    streamlit_pianoroll.from_fortepyan(prepared_piece)
+
                 return
 
         if "code" in slide:
@@ -841,12 +846,18 @@ def main():
         if "video" in slide:
             st.video(slide["video"])
         if "pieces" in slide:
-            for piece in slide["pieces"]:
-                streamlit_pianoroll.from_fortepyan(piece=piece)
+            num_cols = len(slide["pieces"])
+            cols = st.columns(num_cols)
+            for col, piece in zip(cols, slide["pieces"]):
+                with col:
+                    streamlit_pianoroll.from_fortepyan(piece=piece)
         if "piece_paths" in slide:
-            for piece_path in slide["piece_paths"]:
-                prepared_piece = ff.MidiPiece.from_file(piece_path)
-                streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
+            num_cols = len(slide["piece_paths"])
+            cols = st.columns(num_cols)
+            for col, piece_path in zip(cols, slide["piece_paths"]):
+                with col:
+                    prepared_piece = ff.MidiPiece.from_file(piece_path)
+                    streamlit_pianoroll.from_fortepyan(piece=prepared_piece)
         if "dual_piece" in slide:
             streamlit_pianoroll.from_fortepyan(piece=original_piece, secondary_piece=generated_piece)
 
