@@ -18,13 +18,14 @@ def main():
 
     piece_deprived = ff.MidiPiece(notes_deprived)
     piece_extracted = ff.MidiPiece(notes_extracted)
-
+    
+    st.write("Together")
+    streamlit_pianoroll.from_fortepyan(piece_deprived, secondary_piece=piece_extracted)
     st.write(f"Piece without notes from range {low} - {high}")
     streamlit_pianoroll.from_fortepyan(piece_deprived)
     st.write("Extracted notes")
     streamlit_pianoroll.from_fortepyan(piece_extracted)
-    st.write("Together")
-    streamlit_pianoroll.from_fortepyan(piece_deprived, secondary_piece=piece_extracted)
+  
 
 
 if __name__ == "__main__":

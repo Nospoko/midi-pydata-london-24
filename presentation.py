@@ -284,23 +284,23 @@ slides = [
         """,
     },
     {
-        "header": "Initial experiments",
+        "header": "Possible deep-learning tasks",
         "images": ["data/img/graphics2.jpg"],
     },
     {
-        "header": "Initial experiments",
+        "header": "Possible deep-learning tasks",
         "content": """
         #### Initial Plan
         - LLM for Seq-to-Seq
         """,
     },
     {
-        "header": "Initial experiments",
+        "header": "Possible deep-learning tasks",
         "content": """
         #### Initial Plan
         - LLM for Seq-to-Seq
 
-        #### Possible deep-learning tasks
+        #### Exploration
         - Diffusion Models
         - VQ-VAE
         - LLM for Note Pitches
@@ -347,7 +347,7 @@ slides = [
         "images": ["data/img/tokenization_nlp.png"],
     },
     {
-        "header": "BPE tokenizer",
+        "header": "Tokenizer Model: BPE",
         "images": ["data/img/bpe_in_nlp.png"],
     },
     # Quantization
@@ -364,10 +364,6 @@ slides = [
         "dataframe": pd.read_csv("data/quantization.csv", index_col=0)[quantized_df_columns],
     },
     # ExponentialTimeTokenizer
-    {
-        "header": "Pre-tokenization: Transcription",
-        "code": tokens[:20],
-    },
     {
         "header": "Pre-tokenization: Transcription",
         "code": tokens[:20],
@@ -612,11 +608,12 @@ slides = [
     },
     {
         "header": "BPE tokenizer",
-        "images": ["data/img/hello_pydata.png"],
+        "images": ["data/img/bpe_in_nlp.png"],
     },
     {
         "header": "BPE on MIDI",
         "images": ["data/img/bpe.png"],
+        "content": "~2000 tokens instead of ~5000 per one minute of Chopin"
     },
     {
         "header": "Vocabulary example",
@@ -673,10 +670,6 @@ slides = [
         "header": "Pitches of generated notes",
         "images": ["data/img/generated_pitch_comparison.png", "data/img/pitch_comparison.png"],
     },
-    # concatenated generations
-    {
-        "piece_paths": ["data/midi/d_minor_gen.mid"],
-    },
     # Future plans
     {
         "header": "Future plans",
@@ -695,6 +688,14 @@ slides = [
     {
         "header": "Open Problems in Modelling Piano Performances",
         "content": """
+            #### "Musical word" definition
+            - Pre-tokenizing into words.
+            - Defining a heuristics for segmenting a piece into words.
+            - Examples:
+                - Splitting on long pauses.
+                - Allowing BPE to define the words.
+                - Algorithmic implementation of musical phrase.
+
             #### Effective Metrics
             - Defining metrics to track training progress and compare models.
             - Algorithmically determining if a musical piece sounds good and possesses the right structure.
