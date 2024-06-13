@@ -81,7 +81,7 @@ streamlit run midi_basics/streamlit_piece.py
 
 ## Comparing MIDI Pieces
 
-### Plotting Note Pitches Comparison and Note Dstart Comparison
+### Plotting Note Pitches Comparison and Note Time Difference Comparison
 
 We can compare the distribution of note pitches between two MIDI pieces using matplotlib histograms.
 This can provide insights into the pitch range and distribution within each piece.
@@ -103,20 +103,6 @@ python -m streamlit run --server.port 4015 midi_basics/compare_composers.py
 
 ![duration comparison](data/img/duration_comparison.png)
 
-### Comparing Dstart Distributions from .mid files
-
-```shell
-python -m  midi_basics.compare_midi path/to/midi1.mid path/to/midi2.mid
-```
-### Tokenization
-This code loads a maestro dataset, converts it into MIDI pieces, and calculates bin edges for note duration, velocity, and time differences between note starts (dstart). It then digitizes these values into bins. Finally, it plots both the original and digitized note data to visually analyze the distributions and quantized representations.
-```shell
-python tokenization/full_quantization_example.py
-```
-This is an example step-by-step on only velocity:
-```shell
-python tokenization/full_quantization_example.py
-```
 
 ## Modelling
 ### Augmentation
@@ -126,7 +112,7 @@ python -m streamlit run --server.port 4016 modelling/augmentation.py
 ```
 
 ### Note range extraction
-Predicting a sub-sequence of notes within defined range from a sequence of notes deproved of it is
+Predicting a sub-sequence of notes within defined range from a sequence of notes deprived of it is
 an interesting downstream task and a possible benchmark task. The results of generating them with a model can be interesting,
 as they show the model's understanding of musical structure and harmony.
 

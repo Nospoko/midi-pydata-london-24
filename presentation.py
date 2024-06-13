@@ -7,6 +7,8 @@ from datasets import load_dataset
 from modelling.extract_notes import main as benchmark_review
 from tokenization.tokenization import ExponentialTimeTokenizer
 
+st.set_page_config(layout="wide")
+
 
 @st.cache_data
 def load_hf_dataset():
@@ -158,7 +160,7 @@ slides = [
         "header": "Tabular representation",
         "content": """
     ```sql
-    CREATE TABLE performance_data (
+    CREATE TABLE notes (
         pitch INT,
         velocity INT,
         start FLOAT,
@@ -259,7 +261,10 @@ slides = [
         "header": "Pitch distribution",
         "images": ["data/img/pitch_comparison.png"],
     },
-    {"header": "Formal vs informal vocabulary", "images": ["data/img/text_keys.png"]},
+    {
+        "header": "Formal vs informal vocabulary",
+        "images": ["data/img/text_keys.png"],
+    },
     # Modelling
     {
         "header": "MIDI LLM training pipeline",
@@ -282,6 +287,10 @@ slides = [
 
 
         """,
+    },
+    {
+        "header": "Reproducing GPT-2",
+        "images": ["data/img/karpathy.png"],
     },
     {
         "header": "Possible deep-learning tasks",
@@ -350,6 +359,7 @@ slides = [
         "header": "Tokenizer Model: BPE",
         "images": ["data/img/bpe_in_nlp.png"],
     },
+    {"header": "Tokenization Process for MIDI", "images": ["data/img/graphics.jpg"]},
     # Quantization
     {
         "header": "Normalisation - Quantization",
@@ -613,11 +623,13 @@ slides = [
     {
         "header": "BPE on MIDI",
         "images": ["data/img/bpe.png"],
-        "content": "~2000 tokens instead of ~5000 per one minute of Chopin"
+        "content": "~2000 tokens instead of ~5000 per one minute of Chopin",
     },
     {
         "header": "Vocabulary example",
         "content": """
+GPT-2: ~50 000 tokens
+
 | Index | Merged Tokens                           | n_symbols |
 |-------|-----------------------------------------|-----------|
 | 0     | ["NOTE_OFF_72", "3T", "VELOCITY_12"]    | 3         |
@@ -684,7 +696,7 @@ slides = [
             - Experimenting more!
             """,
     },
-    {"header": "Benchmark task example"},
+    {"header": "Downstream task example"},
     {
         "header": "Open Problems in Modelling Piano Performances",
         "content": """
@@ -711,10 +723,6 @@ slides = [
             #### Call to Action
             - https://pianoroll.io
             """,
-    },
-    # Pianoroll
-    {
-        "images": ["data/img/pianoroll_webpage.png"],
     },
     # Pianoroll
     {
@@ -745,17 +753,20 @@ slides = [
     {
         "header": "Thank you very much!",
         "content": """
-    Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
 
-    Github: https://github.com/Nospoko
+    ### **EPR labs: http://epr-labs.com/**
 
-    My Github: https://github.com/WojciechMat
+    ### **Presentation repo: https://github.com/Nospoko/midi-pydata-london-24**
 
-    Presentation repo: https://github.com/Nospoko/midi-pydata-london-24
+    ### Maestro dataset: https://magenta.tensorflow.org/datasets/maestro
 
-    Pianoroll: https://pianoroll.io/
+    ### Our Github: https://github.com/Nospoko
 
-    Email: wmatejuk14@gmail.com
+    ### My Github: https://github.com/WojciechMat
+
+    ### Pianoroll: https://pianoroll.io/
+
+    ### Email: wmatejuk14@gmail.com
     """,
     },
 ]
@@ -788,7 +799,7 @@ def main():
                 streamlit_pianoroll.from_fortepyan(piece=piece)
                 return
 
-            if slide["header"] == "Benchmark task example":
+            if slide["header"] == "Downstream task example":
                 benchmark_review()
 
             if slide["header"] == "Mechanical vs human":
