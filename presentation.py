@@ -3,6 +3,7 @@ import fortepyan as ff
 import streamlit as st
 import streamlit_pianoroll
 from datasets import load_dataset
+from streamlit_shortcuts import add_keyboard_shortcuts
 
 from modelling.extract_notes import main as benchmark_review
 from tokenization.tokenization import ExponentialTimeTokenizer
@@ -111,6 +112,9 @@ two_notes = pd.DataFrame(two_notes)
 
 # Slide content
 slides = [
+    {
+        "piece_paths": ["data/midi/rick.mid"],
+    },
     # Opening slide
     {
         "images": ["data/img/cover.png"],
@@ -119,6 +123,10 @@ slides = [
     {
         "header": '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"',
         "images": ["data/img/pythagoras.png"],
+        "content": """
+        - The Pythagoreans are believed to be the first to investigate mathematical relationships in music.
+        - The drawing is from "Theory of Music" (1492).
+        """,
     },
     {
         "header": "Algorithmic music composition",
@@ -715,6 +723,8 @@ GPT-2: ~50 000 tokens
                 - Assessing tempo consistency (approximating beats per minute).
                 - Checking if pitches are from the same key as the rest of the piece.
 
+            #### Finding the right architecture
+
             #### Algorithmic Music Generation
             - Training models on algorithmically generated music.
             - Combining real music performances with algorithmic composition.
@@ -722,6 +732,8 @@ GPT-2: ~50 000 tokens
 
             #### Call to Action
             - https://pianoroll.io
+            - https://github.com/Nospoko/fortepyan
+            - https://github.com/Nospoko/streamlit-pianoroll
             """,
     },
     # Pianoroll
@@ -751,7 +763,7 @@ GPT-2: ~50 000 tokens
     },
     # links
     {
-        "header": "Thank you very much!",
+        "header": "Thank you!",
         "content": """
 
     ### **EPR labs: http://epr-labs.com/**
@@ -782,6 +794,13 @@ def main():
         if st.session_state.slide < len(slides) - 1:
             st.session_state.slide += 1
     pres_columns = st.columns([1, 5, 1])
+
+    add_keyboard_shortcuts(
+        {
+            "ArrowRight": "Next",
+            "ArrowLeft": "Previous",
+        }
+    )
     with pres_columns[1]:
         # Display the current slide
         slide = slides[st.session_state.slide]
@@ -833,7 +852,24 @@ def main():
                     st.dataframe(prepared_piece.df)
                 with display_columns[1]:
                     streamlit_pianoroll.from_fortepyan(prepared_piece)
+                return
 
+            if (
+                slide["header"]
+                == '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"'
+            ):
+                cols = st.columns([1, 2])
+                cols[0].write(slide["content"])
+                cols[1].image(slide["images"][0])
+                return
+
+            if slide["header"] == "Thank you!":
+                cols = st.columns([4, 1])
+                cols[0].write(slide["content"])
+                cols[1].write("#### My Linkedin:")
+                cols[1].image("data/img/linkedin.png")
+                cols[1].write("#### pianoroll.io:")
+                cols[1].image("data/img/pianoroll_qr.png")
                 return
 
         if "code" in slide:

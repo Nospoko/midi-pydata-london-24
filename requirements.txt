@@ -6,4 +6,5 @@ numpy==1.26.3
 pandas==2.1.4
 PyYAML==6.0.1
 streamlit==1.34.0
+streamlit-shortcuts==0.1.3
 streamlit_pianoroll==0.7.1
