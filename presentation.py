@@ -723,7 +723,7 @@ GPT-2: ~50 000 tokens
                 - Assessing tempo consistency (approximating beats per minute).
                 - Checking if pitches are from the same key as the rest of the piece.
 
-            #### Finding the right architecture
+            #### Finding the right architectures
 
             #### Algorithmic Music Generation
             - Training models on algorithmically generated music.
@@ -858,7 +858,7 @@ def main():
                 slide["header"]
                 == '"There is geometry in the humming of the strings, and there is music in the spacing of the spheres"'
             ):
-                cols = st.columns([1, 2])
+                cols = st.columns([2, 3])
                 cols[0].write(slide["content"])
                 cols[1].image(slide["images"][0])
                 return
